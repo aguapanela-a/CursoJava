@@ -1,6 +1,7 @@
 package platzi.play.project;
 
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.plataforma.Rol;
 import platzi.play.project.plataforma.Usuario;
 import platzi.play.project.util.ScannerUtils;
 
@@ -39,12 +40,9 @@ public class Main {
                 ScannerUtils.SCANNER.next();
             }
         }
-
+        Rol admin = new Rol("Administrador");
         Pelicula pelicula = new Pelicula(titulo,descripcion,duracion,genero, true,calificacion);
-
-
-
-        Usuario usuario1 = new Usuario("Erikc", "eric@gmail.com");
+        Usuario usuario1 = new Usuario("Erikc", "eric@gmail.com", admin);
 
 
         System.out.println(usuario1.ver(pelicula));
@@ -56,5 +54,6 @@ public class Main {
         System.out.printf("Señor %s usted se ha registrado  en la fecha %s", usuario1.nombre, usuario1.fechaRegistro.format(formatoFechas));
         System.out.println("%nY la calificación es: " + pelicula.calificacion);
 
+        System.out.println(usuario1.verRol());
     }
 }

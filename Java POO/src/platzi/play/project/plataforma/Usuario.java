@@ -1,25 +1,27 @@
 package platzi.play.project.plataforma;
-
 import platzi.play.project.contenido.Pelicula;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Usuario {
     public String nombre;
     public String correo;
-    //public String contrasenia;
+    public Rol rolUser;
     public LocalDateTime fechaRegistro;
 
-    public Usuario(String nombre, String correo) {
+    public Usuario(String nombre, String correo, Rol rol) {
         this.nombre = nombre;
         this.correo = correo;
+        this.rolUser = rol;
         this.fechaRegistro = LocalDateTime.now();
     }
 
     public void registrarse(String nombre, String correo){
         this.nombre = nombre;
         this.correo = correo;
+    }
+
+    public String verRol(){
+        return "Su rol es " + this.rolUser.getNombre();
     }
 
     public String ver(Pelicula pelicula){

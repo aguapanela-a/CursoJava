@@ -24,11 +24,11 @@ public class ScannerUtils {
         System.out.println(mensaje + ":");
         double dato = SCANNER.nextDouble();
         SCANNER.nextLine();
-        return  dato;
+        return dato;
     }
 }
 
 //la clase anterior permite que al crear un objeto de tipo ScannerUtils que pueda usarse como un input(mensaje)  SIN LOS MÉTODOS ESTÁTICOS
 //al hacer que los métodos dean estáticos, NO es necesario crar un objeto de tipo ScannerUtils, sino que llamándo directamente la calse ya podré accader a él
 //así: int edad = ScannerUtils.capturarEntero("Ingresa tu edad");
-//utiles para llevar ocnteos o validaciones o clases utilitarias como esta
+//utiles para llevar conteos o validaciones o clases utilitarias como esta
