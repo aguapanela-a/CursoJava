@@ -1,6 +1,7 @@
 package platzi.play.project.contenido;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Pelicula {
     public String titulo;
@@ -10,6 +11,23 @@ public class Pelicula {
     public LocalDate fechaEstreno;
     public double calificacion;
     public boolean disponibilidad;
+
+    public Pelicula(String titulo,String descripcion, int duracion, String genero ){
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.duracion = duracion;
+        this.genero = genero;
+        this.fechaEstreno = LocalDate.now();
+        this.disponibilidad = true;
+    }
+
+    public Pelicula(String titulo, String descripcion, int duracion , String genero, boolean disponibilidad, double nota) {
+        this(titulo, descripcion, duracion, genero); // ejecuta el contructor de arriba y luego este
+        this.disponibilidad = disponibilidad;
+        this.calificar(nota);
+    }
+
+    // sobrecarda de constructores para hacer que algunos parámetros sean opcionales, como la disponibilidad y calificación
 
     public String reproducir(){
         return String.format("Está reproduciendo %s", titulo);

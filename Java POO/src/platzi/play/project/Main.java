@@ -10,7 +10,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
+    public static final String VERSION = "1.0.0"; // contants deberían ser mayúsculas, la palabra finales para contantes
+    public static final String NOMBRE_PLATAFORMA = "PLATFORMA STREAMING "; // Son ideales para represnetar datos como configuraciones, límites y demás valores que no cambiarán nunca
+
     public static void main(String[] args) {
+        System.out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
 
         //Scanner entrada = new Scanner(System.in);
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
@@ -21,26 +25,10 @@ public class Main {
         String genero = ScannerUtils.capturarTexto("Ingresa el generode la peli");
         int duracion = ScannerUtils.capturarEntero("Ingresa la duración de la peli");
 
-        Pelicula pelicula = new Pelicula();
-        pelicula.titulo = titulo;
-        pelicula.descripcion = descripcion;
-        pelicula.genero = genero;
-        pelicula.fechaEstreno = LocalDate.of(2004, 4, 22);
-        pelicula.duracion = duracion;
-
-
-        Usuario usuario1 = new Usuario();
-
-        usuario1.nombre = "Erik";
-        usuario1.fechaRegistro = LocalDateTime.of(2024, 6, 4, 17, 43, 4);
-
-        System.out.println(usuario1.ver(pelicula));
-        System.out.println(usuario1.pausar(pelicula));
-
         double calificacion = -1;
         while (calificacion < 0 || calificacion > 5) {
-            System.out.printf("Por favor ingrese la calificaión de la película %s del 0 al 5", pelicula.titulo);
-            if (ScannerUtils.scanner.hasNextDouble()) { //Si  lo escrito es un numero devuelve true y sigue
+            System.out.printf("Por favor ingrese la calificaión de la película %s del 0 al 5", titulo);
+            if (ScannerUtils.SCANNER.hasNextDouble()) { //Si  lo escrito es un numero devuelve true y sigue
                 calificacion = ScannerUtils.capturarDecimal("");
 
                 if (calificacion < 0 || calificacion > 5) {
@@ -48,15 +36,25 @@ public class Main {
                 }
             } else { //si el has es falso, toca usar entrada.next() para "limpiar" esa palabra errónea de la memoria del Scanner
                 System.out.println("Eso no es un número xd");
-                ScannerUtils.scanner.next();
+                ScannerUtils.SCANNER.next();
             }
         }
-        pelicula.calificar(calificacion);
+
+        Pelicula pelicula = new Pelicula(titulo,descripcion,duracion,genero, true,calificacion);
+
+
+
+        Usuario usuario1 = new Usuario("Erikc", "eric@gmail.com");
+
+
+        System.out.println(usuario1.ver(pelicula));
+        System.out.println(usuario1.pausar(pelicula));
+
 
 
 
         System.out.printf("Señor %s usted se ha registrado  en la fecha %s", usuario1.nombre, usuario1.fechaRegistro.format(formatoFechas));
-
+        System.out.println("%nY la calificación es: " + pelicula.calificacion);
 
     }
 }

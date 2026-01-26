@@ -11,6 +11,12 @@ public class Usuario {
     //public String contrasenia;
     public LocalDateTime fechaRegistro;
 
+    public Usuario(String nombre, String correo) {
+        this.nombre = nombre;
+        this.correo = correo;
+        this.fechaRegistro = LocalDateTime.now();
+    }
+
     public void registrarse(String nombre, String correo){
         this.nombre = nombre;
         this.correo = correo;
