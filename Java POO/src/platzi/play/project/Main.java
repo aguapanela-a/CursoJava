@@ -40,7 +40,7 @@ public class Main {
                 ScannerUtils.SCANNER.next();
             }
         }
-        Rol admin = new Rol("Administrador");
+        Rol admin = new Rol("Administrador"); // admin se guarda en el stack porque referencia un objeto, pero el objeto en sí se guarda en el heap
         Pelicula pelicula = new Pelicula(titulo,descripcion,duracion,genero, true,calificacion);
         Usuario usuario1 = new Usuario("Erikc", "eric@gmail.com", admin);
 
