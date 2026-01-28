@@ -23,7 +23,7 @@ public class Main {
         //Utilizxo la calse de utilidad que hice para emular un input()
         String titulo = ScannerUtils.capturarTexto("Ingresa el titulo de la peli");
         String descripcion = ScannerUtils.capturarTexto("Ingresa la descripción de la peli");
-        String genero = ScannerUtils.capturarTexto("Ingresa el generode la peli");
+        String genero = ScannerUtils.capturarTexto("Ingresa el genero de la peli");
         int duracion = ScannerUtils.capturarEntero("Ingresa la duración de la peli");
 
         double calificacion = -1;
@@ -48,12 +48,14 @@ public class Main {
         System.out.println(usuario1.ver(pelicula));
         System.out.println(usuario1.pausar(pelicula));
 
+        pelicula.setDescripcion("Descripción modioficada desde un set");
 
-
-
-        System.out.printf("Señor %s usted se ha registrado  en la fecha %s", usuario1.nombre, usuario1.fechaRegistro.format(formatoFechas));
-        System.out.println("%nY la calificación es: " + pelicula.calificacion);
+        System.out.println(pelicula.getDescripcion());
+        System.out.printf("Señor %s usted se ha registrado  en la fecha %s %n", usuario1.nombre, usuario1.fechaRegistro.format(formatoFechas));
+        System.out.println("Y la calificación es: " + pelicula.getCalificacion());
 
         System.out.println(usuario1.verRol());
+
     }
 }
+//Encapsulameinto: es ocultar o proteger los detalles internos de una clase para que solo se pueda accedeer a la info de esa calse de una forma controlada

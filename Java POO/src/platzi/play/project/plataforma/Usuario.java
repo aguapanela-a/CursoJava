@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 public class Usuario {
     public String nombre;
     public String correo;
-    public Rol rolUser;
+    private Rol rolUser;
     public LocalDateTime fechaRegistro;
+
 
     public Usuario(String nombre, String correo, Rol rol) {
         this.nombre = nombre;
