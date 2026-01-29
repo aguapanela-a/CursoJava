@@ -7,11 +7,19 @@ import java.util.List;
 
 public class Plataforma {
     private String nombre;
-    private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película
+    private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
+    private Usuario usuario;;
+    private List<Usuario> listaUser;
 
     public Plataforma(String nombre){
         this.nombre = nombre;
         this.contenido = new ArrayList<>();  // OPara cualquier atributo de arriba, si no lo incicializo en el contructor, a la hora de crwear una instancia de esta clase, NO se inicializará ese atributo
+        this.listaUser = new ArrayList<>(); // inicializo la lista de usuarios cuando creo la plataforma
+    }
+
+    public void registrarUsuario(String nombreUser, String correoUser,Rol rolUser){
+        this.usuario = new Usuario(nombreUser, correoUser, rolUser);
+        this.listaUser.add(this.usuario);
     }
 
     public void agregarPeli(Pelicula pelicula){
