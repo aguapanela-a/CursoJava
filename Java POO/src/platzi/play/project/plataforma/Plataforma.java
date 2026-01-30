@@ -8,7 +8,6 @@ import java.util.List;
 public class Plataforma {
     private String nombre;
     private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
-    private Usuario usuario;;
     private List<Usuario> listaUser;
 
     public Plataforma(String nombre){
@@ -18,8 +17,7 @@ public class Plataforma {
     }
 
     public void registrarUsuario(String nombreUser, String correoUser,Rol rolUser){
-        this.usuario = new Usuario(nombreUser, correoUser, rolUser);
-        this.listaUser.add(this.usuario);
+        this.listaUser.add(new Usuario(nombreUser, correoUser, rolUser));
     }
 
     public void agregarPeli(Pelicula pelicula){
