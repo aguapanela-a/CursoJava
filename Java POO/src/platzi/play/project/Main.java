@@ -17,9 +17,12 @@ public class Main {
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
         Plataforma plataforma = new Plataforma(NOMBRE_PLATAFORMA);
         System.out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
+
+        cargarPeliculas(plataforma);
+
         int contador = 0;
 
-        while(true){ // 4 comillas para escribir varias lineas de string
+        while(true){ // 4 comillas para escribir varias líneas de string
             int opcionElegida = ScannerUtils.capturarEntero("""
                     Por favor igrese el número de la opción que desea escoger:
                         1. Agregar película
@@ -54,8 +57,26 @@ public class Main {
                 }
                 case 3 -> {
 
-                    //String buscaPeli = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
-                    System.out.println("Por ahora la opción bucar no está implementada, intente otra ocpión");
+                    String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
+                    Pelicula peli = plataforma.buscarPorTitulo(titulo);
+                    if(peli != null){
+                        while(true){
+                            System.out.printf("¿Qué desea hacer con la película %s$n?", peli.getTitulo());
+                            int opcion = ScannerUtils.capturarEntero("""
+                            1. Ver película
+                            2. Pausar película
+                            3. Ver ficha técica
+                            """); // no sé si falta salir de búsqueda xd
+
+                            switch (opcion){
+                                case 1 -> peli.reproducir();
+                                case 2 -> peli.pausar();
+                                case 3 -> System.out.println(peli.obtenerFichaTecnica());
+                            }
+                        }
+                    }
+
+
 
                 }
                 case 4 -> { //si elimina pero también borra el id, no es la idea
@@ -68,48 +89,19 @@ public class Main {
             }
         }
 
-        //Utilizxo la calse de utilidad que hice para emular un input()
-//        String titulo = ScannerUtils.capturarTexto("Ingresa el titulo de la peli");
-//        String descripcion = ScannerUtils.capturarTexto("Ingresa la descripción de la peli");
-//        String genero = ScannerUtils.capturarTexto("Ingresa el genero de la peli");
-//        int duracion = ScannerUtils.capturarEntero("Ingresa la duración de la peli");
-//
-//        double calificacion = -1;
-//        while (calificacion < 0 || calificacion > 5) {
-//            System.out.printf("Por favor ingrese la calificaión de la película %s del 0 al 5", titulo);
-//            if (ScannerUtils.SCANNER.hasNextDouble()) { //Si  lo escrito es un numero devuelve true y sigue
-//                calificacion = ScannerUtils.capturarDecimal("");
-//
-//                if (calificacion < 0 || calificacion > 5) {
-//                    System.out.println("Por favor ingrese una calificaión entre 0 y 5");
-//                }
-//            } else { //si el has es falso, toca usar entrada.next() para "limpiar" esa palabra errónea de la memoria del Scanner
-//                System.out.println("Eso no es un número xd");
-//                ScannerUtils.SCANNER.next();
-//            }
-//        }
-//
-//        Rol admin = new Rol("Administrador"); // admin se guarda en el stack porque referencia un objeto, pero el objeto en sí se guarda en el heap
-//        Pelicula pelicula1 = new Pelicula(titulo,descripcion,duracion,genero, true,calificacion);
-//        Pelicula pelicula2 = new Pelicula("Anulo esas palabras", "culito", 234, "Comedia");
-//        Pelicula pelicula3 = new Pelicula("Auloas", "o", 34, "Codia");
-//
-//        Usuario usuario1 = new Usuario("Erikc", "eric@gmail.com", admin);
-//
-//        plataforma.agregarPeli(pelicula1);
-//        plataforma.agregarPeli(pelicula2);
-//        plataforma.agregarPeli(pelicula3);
-//
-//        plataforma.eliminarPeli(pelicula2);
-//
-//        System.out.println(plataforma.listarPelis()) ;
-//
-//        System.out.printf("Señor %s usted se ha registrado  en la fecha %s %n", usuario1.nombre, usuario1.fechaRegistro.format(formatoFechas));
-//        System.out.println("Y la calificación es: " + pelicula1.getCalificacion());
-//
-//        System.out.println(usuario1.verRol());
 
-
+    }
+    private static void cargarPeliculas(Plataforma plataforma) {
+        plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, "Animada"));
+        plataforma.agregarPeli(new Pelicula("Inception"," ", 148, "Ciencia Ficción"));
+        plataforma.agregarPeli(new Pelicula("Titanic", " ",195, "Drama"));
+        plataforma.agregarPeli(new Pelicula("John Wick", " ",101, "Acción"));
+        plataforma.agregarPeli(new Pelicula("El Conjuro", " ",112, "Terror"));
+        plataforma.agregarPeli(new Pelicula("Coco", " ",105, "Animada"));
+        plataforma.agregarPeli(new Pelicula("Interstellar", " ",169, "Ciencia Ficción"));
+        plataforma.agregarPeli(new Pelicula("Joker", " ",122, "Drama"));
+        plataforma.agregarPeli(new Pelicula("Toy Story", " ",81, "Animada"));
+        plataforma.agregarPeli(new Pelicula("Avengers: Endgame", " ",181, "Acción"));
     }
 }
 //Encapsulameinto: es ocultar o proteger los detalles internos de una clase para que solo se pueda acceder a la info de esa clase de una forma controlada

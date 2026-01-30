@@ -41,6 +41,15 @@ public class Plataforma {
         return titulos;
     }
 
+    public Pelicula buscarPorTitulo(String titulo){
+        for(Pelicula pelicula : contenido){
+            if(pelicula.getTitulo().equalsIgnoreCase(titulo)){ //compara el título ingresado ignorando mayúsculas y minúsculas
+                return pelicula;
+            }
+        }
+        return null;
+    }
+
     public void eliminarPeliPorId(int idPelicula){
         contenido.removeIf(peli -> peli.getIdPeli() == idPelicula); // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
     }
