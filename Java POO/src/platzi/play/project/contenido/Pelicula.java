@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class Pelicula {
     private String titulo;
+    private int idPeli;
     private String descripcion;
     private int duracion;
     private String genero;
@@ -56,6 +57,14 @@ public class Pelicula {
 
     public String getTitulo() {
         return titulo;
+    }
+
+    public int getIdPeli() {
+        return idPeli;
+    }
+
+    public void setIdPeli(int idPeli) {
+        this.idPeli = idPeli;
     }
 
     public String getDescripcion() {

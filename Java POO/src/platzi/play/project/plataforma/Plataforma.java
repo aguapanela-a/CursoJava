@@ -38,12 +38,12 @@ public class Plataforma {
     public List<String> listarPelis(){
         List<String> titulos = new ArrayList<>();
         for(Pelicula pelicula : contenido){
-            titulos.add(pelicula.getTitulo());
+            titulos.add(pelicula.getIdPeli()+ ". " + pelicula.getTitulo());
         }
         return titulos;
     }
 
-    public void eliminarPeli(Pelicula pelicula){
-        this.contenido.remove(pelicula);
+    public void eliminarPeliPorId(int idPelicula){
+        contenido.removeIf(peli -> peli.getIdPeli() == idPelicula); // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
     }
 }
