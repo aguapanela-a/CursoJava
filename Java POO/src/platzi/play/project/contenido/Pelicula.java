@@ -1,15 +1,34 @@
 package platzi.play.project.contenido;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Pelicula {
-    public String titulo;
-    public String descripcion;
-    public int duracion;
-    public String genero;
-    public LocalDate fechaEstreno;
-    public double calificacion;
-    public boolean disponibilidad;
+    private String titulo;
+    private int idPeli;
+    private String descripcion;
+    private int duracion;
+    private String genero;
+    private LocalDate fechaEstreno;
+    private double calificacion;
+    private boolean disponibilidad;
+
+    public Pelicula(String titulo,String descripcion, int duracion, String genero ){
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.duracion = duracion;
+        this.genero = genero;
+        this.fechaEstreno = LocalDate.now();
+        this.disponibilidad = true;
+    }
+
+    public Pelicula(String titulo, String descripcion, int duracion , String genero, boolean disponibilidad, double nota) {
+        this(titulo, descripcion, duracion, genero); // ejecuta el contructor de arriba y luego este
+        this.disponibilidad = disponibilidad;
+        this.calificar(nota);
+    }
+
+    // sobrecarga de constructores para hacer que algunos parámetros sean opcionales, como la disponibilidad y calificación
 
     public String reproducir(){
         return String.format("Está reproduciendo %s", titulo);
@@ -36,4 +55,51 @@ public class Pelicula {
         return this.calificacion >= 4;  //devuelvem,e el resukltado de esta comparación
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public int getIdPeli() {
+        return idPeli;
+    }
+
+    public void setIdPeli(int idPeli) {
+        this.idPeli = idPeli;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public LocalDate getFechaEstreno() {
+        return fechaEstreno;
+    }
+
+    public double getCalificacion() {
+        return calificacion;
+    }
+
+    public boolean isDisponibilidad() {
+        return disponibilidad;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setDisponibilidad(boolean disponibilidad) {
+        this.disponibilidad = disponibilidad;
+    }
+
+    public void setFechaEstreno(LocalDate fechaEstreno) {
+        this.fechaEstreno = fechaEstreno;
+    }
 }
