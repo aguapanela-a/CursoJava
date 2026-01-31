@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Plataforma {
+    private int contadorID = 1;
     private String nombre;
     private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
     private List<Usuario> listaUser;
@@ -22,6 +23,7 @@ public class Plataforma {
 
     public void agregarPeli(Pelicula pelicula){
         this.contenido.add(pelicula);  //métodfo add es similar al .append de python, agrega un elemento a la lista creada previamente
+        pelicula.setIdPeli(this.contadorID++);
     }
 
 //    public List<String> listarPelis(){
@@ -50,7 +52,8 @@ public class Plataforma {
         return null;
     }
 
-    public void eliminarPeliPorId(int idPelicula){
-        contenido.removeIf(peli -> peli.getIdPeli() == idPelicula); // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
+    public boolean eliminarPeliPorId(int idPelicula){
+        // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
+        return contenido.removeIf(peli -> peli.getIdPeli() == idPelicula);
     }
 }
