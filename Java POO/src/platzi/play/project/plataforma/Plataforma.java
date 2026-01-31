@@ -37,9 +37,7 @@ public class Plataforma {
 
     public List<String> listarPelis(){
         List<String> titulos = new ArrayList<>();
-        for(Pelicula pelicula : contenido){
-            titulos.add(pelicula.getIdPeli()+ ". " + pelicula.getTitulo());
-        }
+        contenido.forEach(pelicula -> titulos.add(pelicula.getIdPeli()+ ". " + pelicula.getTitulo()));
         return titulos;
     }
 
