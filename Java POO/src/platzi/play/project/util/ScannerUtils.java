@@ -1,5 +1,7 @@
 package platzi.play.project.util;
 
+import platzi.play.project.contenido.Genero;
+
 import java.util.Scanner;
 
 public class ScannerUtils {
@@ -36,6 +38,18 @@ public class ScannerUtils {
         double dato = SCANNER.nextDouble();
         SCANNER.nextLine();
         return dato;
+    }
+
+    public static Genero capturarGenero(String mensaje){
+        while (true){
+            String entrada = capturarTexto(mensaje);
+            try {
+                return Genero.valueOf(entrada.toUpperCase());  //intente retornar el string ingresado convertido a genero
+            }catch (IllegalArgumentException e){                //si no existe el genero ingresado capturará el error IllegalArgumentException y, en lugar de terminar el programa, imprimirá lo expresado y se repetirá el while
+                System.out.println("Dato no aceptado. "+mensaje+":");
+            }
+        }
+
     }
 }
 

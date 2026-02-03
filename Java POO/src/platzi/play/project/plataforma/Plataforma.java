@@ -1,5 +1,6 @@
 package platzi.play.project.plataforma;
 
+import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Pelicula;
 
 import java.util.ArrayList;
@@ -71,9 +72,9 @@ public class Plataforma {
         return contenido.stream().filter(pelicula -> pelicula.getTitulo().equalsIgnoreCase(titulo)).findFirst().orElse(null); //tomará de contenido unicamente la primer peli que  la condición y si no existe ese primero retorna null
     }
 
-    public List<String> buscarPorGenero(String genero) {
+    public List<String> buscarPorGenero(Genero genero) {
         return contenido.stream()
-                .filter(p -> p.getGenero().equalsIgnoreCase(genero)) // Filtramos por género
+                .filter(p -> p.getGenero().equals(genero)) // Filtramos por género
                 .map(p -> p.getIdPeli() + ". " + p.getTitulo())     // Transformamos la Pelicula en el String requerido
                 .toList();                                          // Creamos la lista final directamente
     }

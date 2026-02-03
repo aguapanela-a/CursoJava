@@ -1,5 +1,6 @@
 package platzi.play.project;
 
+import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Pelicula;
 import platzi.play.project.plataforma.Plataforma;
 import platzi.play.project.plataforma.Rol;
@@ -54,15 +55,13 @@ public class Main {
             switch (opcionElegida){
                 case AGREGAR -> { // la flecha es operación lambda
 
-                    //contador++;
-
                     String tituloPeli = ScannerUtils.capturarTexto("Por favor escriba el título de la película a agregar");
                     String descripcionPeli = ScannerUtils.capturarTexto("Por favor escriba la descripción de la película");
                     int duracionPeli = ScannerUtils.capturarEntero("Por favor escriba la duración de la película");
-                    String generoPeli = ScannerUtils.capturarTexto("Por favor escriba el género de la película");
+                    Genero generoPeli = Genero.valueOf(ScannerUtils.capturarTexto("Por favor escriba el género de la película"));
 
                     Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
-                    //pelicula.setIdPeli(contador);
+
                     plataforma.agregarPeli(pelicula);
                 }
                 case MOSTRAR_TODO -> {
@@ -81,7 +80,7 @@ public class Main {
                             int opcion = ScannerUtils.capturarEntero("""
                             1. Ver película
                             2. Pausar película
-                            3. Ver ficha técica
+                            3. Ver ficha técnica
                             4. Calificar película
                             """); // no sé si falta salir de búsqueda xd
 
@@ -101,7 +100,7 @@ public class Main {
                     }
                 }
                 case BUSCAR_POR_GENERO -> {
-                    String genero = ScannerUtils.capturarTexto("Por favor ingrese el género que desea ver");
+                    Genero genero = Genero.valueOf(ScannerUtils.capturarTexto("Por favor ingrese el género que desea ver"));
                     plataforma.buscarPorGenero(genero).forEach(s -> out.printf("Película %-10s%n", s));
                 }
                 case VER_POPULARES -> {
@@ -133,16 +132,16 @@ public class Main {
 
     }
     private static void cargarPeliculas(Plataforma plataforma) {
-        plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, "Animada"));
-        plataforma.agregarPeli(new Pelicula("Inception"," ", 148, "Ciencia Ficción"));
-        plataforma.agregarPeli(new Pelicula("Titanic", " ",195, "Drama"));
-        plataforma.agregarPeli(new Pelicula("John Wick", " ",101, "Acción"));
-        plataforma.agregarPeli(new Pelicula("El Conjuro", " ",112, "Terror"));
-        plataforma.agregarPeli(new Pelicula("Coco", " ",105, "Animada"));
-        plataforma.agregarPeli(new Pelicula("Interstellar", " ",169, "Ciencia Ficción"));
-        plataforma.agregarPeli(new Pelicula("Joker", " ",122, "Drama"));
-        plataforma.agregarPeli(new Pelicula("Toy Story", " ",81, "Animada"));
-        plataforma.agregarPeli(new Pelicula("Avengers: Endgame", " ",181, "Acción"));
+        plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, Genero.ANIMADA));
+        plataforma.agregarPeli(new Pelicula("Inception"," ", 148, Genero.CIENCIA_FICCION));
+        plataforma.agregarPeli(new Pelicula("Titanic", " ",195, Genero.DRAMA));
+        plataforma.agregarPeli(new Pelicula("John Wick", " ",101, Genero.ACCION));
+        plataforma.agregarPeli(new Pelicula("El Conjuro", " ",112, Genero.TERROR));
+        plataforma.agregarPeli(new Pelicula("Coco", " ",105, Genero.ANIMADA));
+        plataforma.agregarPeli(new Pelicula("Interstellar", " ",169, Genero.CIENCIA_FICCION));
+        plataforma.agregarPeli(new Pelicula("Joker", " ",122, Genero.DRAMA));
+        plataforma.agregarPeli(new Pelicula("Toy Story", " ",81, Genero.ANIMADA));
+        plataforma.agregarPeli(new Pelicula("Avengers: Endgame", " ",181, Genero.ACCION));
     }
 }
 //Encapsulameinto: es ocultar o proteger los detalles internos de una clase para que solo se pueda acceder a la info de esa clase de una forma controlada
