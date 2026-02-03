@@ -3,7 +3,9 @@ package platzi.play.project.plataforma;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Pelicula;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -82,6 +84,14 @@ public class Plataforma {
     public boolean eliminarPeliPorId(int idPelicula){
         // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
         return contenido.removeIf(peli -> peli.getIdPeli() == idPelicula);
+    }
+
+    public List<String> getGeneros(){
+
+        return Arrays               //Arrays es una clase de java que tiene métodos estáticos para trabajar con arreglos, en este caso usamos el método stream() para crear un stream a partir del array devuelto por Genero.values()
+        .stream(Genero.values())    //values() es un método estático que devuelve un array con todos los valores del enum Genero
+        .map(Genero::name)          //map transforma cada valor del enum en su representación en String usando el método name()
+        .toList();                  //toList() convierte el stream resultante en una lista de Strings y la devuelve
     }
 
     public String getNombre() {

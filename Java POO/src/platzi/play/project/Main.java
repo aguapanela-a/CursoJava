@@ -99,10 +99,15 @@ public class Main {
                         out.println("Oops! Lamentamos decirte que la película a buscar aún no existe en " + NOMBRE_PLATAFORMA);
                     }
                 }
+
                 case BUSCAR_POR_GENERO -> {
-                    Genero genero = Genero.valueOf(ScannerUtils.capturarTexto("Por favor ingrese el género que desea ver"));
+                    out.printf("Géneros dsiponibles: \n");
+                    plataforma.getGeneros().forEach(genero -> out.printf("Género %-10s%n", genero));
+
+                    Genero genero = ScannerUtils.capturarGenero("Por favor ingrese el género que desea ver");
                     plataforma.buscarPorGenero(genero).forEach(s -> out.printf("Película %-10s%n", s));
                 }
+
                 case VER_POPULARES -> {
 
                     out.printf("Top %d películas más populares de %s%n", TOP, NOMBRE_PLATAFORMA);
