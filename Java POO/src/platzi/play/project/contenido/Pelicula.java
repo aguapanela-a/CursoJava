@@ -8,12 +8,12 @@ public class Pelicula {
     private int idPeli;
     private String descripcion;
     private int duracion;
-    private String genero;
+    private Genero genero;
     private LocalDate fechaEstreno;
     private double calificacion;
     private boolean disponibilidad;
 
-    public Pelicula(String titulo,String descripcion, int duracion, String genero ){
+    public Pelicula(String titulo,String descripcion, int duracion, Genero genero ){
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.duracion = duracion;
@@ -22,7 +22,7 @@ public class Pelicula {
         this.disponibilidad = true;
     }
 
-    public Pelicula(String titulo, String descripcion, int duracion , String genero, boolean disponibilidad, double nota) {
+    public Pelicula(String titulo, String descripcion, int duracion , Genero genero, boolean disponibilidad, double nota) {
         this(titulo, descripcion, duracion, genero); // ejecuta el contructor de arriba y luego este
         this.disponibilidad = disponibilidad;
         this.calificar(nota);
@@ -39,7 +39,7 @@ public class Pelicula {
     }
 
     public String obtenerFichaTecnica(){
-        return String.format("La película  %s publicada el año %tY: %n %s %n Género: %s %n calificaión: %.1f/5", this.titulo,this.fechaEstreno, this.descripcion, this.genero,this.calificacion);
+        return String.format("La película  %s publicada el año %tY: %n %s %n Género: %s %n calificación: %.1f/5", this.titulo,this.fechaEstreno, this.descripcion, this.genero,this.calificacion);
     }
 
     public String calificar(double nota){
