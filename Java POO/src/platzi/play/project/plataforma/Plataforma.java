@@ -3,6 +3,7 @@ package platzi.play.project.plataforma;
 import platzi.play.project.contenido.Pelicula;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Plataforma {
@@ -28,7 +29,7 @@ public class Plataforma {
 
 //    public List<String> listarPelis(){
 //        int i; //inicializo el entero i
-//        List<String> titulos = new ArrayList<>();  //Creo la lista de Strings titulos y la uinciializo como neuvo arraylist
+//        List<String> titulos = new ArrayList<>();  //Creo la lista de Strings titulos y la inicializo como neuvo arraylist
 //        //para i = 0 hasta que i < el tamaño de la lista contenido -> sume 1 a i
 //        for (i = 0; i < contenido.size(); i++)
 //            titulos.add(i + 1 + "- " + contenido.get(i).getTitulo());    //nombre_lista.get(i) es equivalente  a nombre_lista[i] de python
@@ -36,22 +37,53 @@ public class Plataforma {
 //    }
 
     public List<String> listarPelis(){
-        List<String> titulos = new ArrayList<>();
-        contenido.forEach(pelicula -> titulos.add(pelicula.getIdPeli()+ ". " + pelicula.getTitulo()));
-        return titulos;
+        return contenido.stream().map(pelicula -> pelicula.getIdPeli() + ". " + pelicula.getTitulo()).toList();
+    }
+
+    public int getDuracionTotal(){
+        return contenido.stream().mapToInt(Pelicula::getDuracion).sum();  //agarra cada duración de cada Pelicula de contenido y las suma
+    }
+
+    public List<String> getPopulares(int limite){
+        List<Pelicula> listaPelisPupis =  contenido.stream()                        //En esta lista iniciamos el stream()
+                .sorted(Comparator.comparingDouble(Pelicula::getCalificacion)       //aquí usamos.sorted( ¿que acomodaremos? ), agarrará las calificaciones de cada película y ordenará las pelis según eso, comparando las calificaciones
+                        .reversed())                                                //y reversed para que los ponga del mayor al menor
+                .limit(limite)                                                      //en la nueva lista unicamente se guardarán la cantidad de elementos ordenados que limit() diga
+                .toList();                                                          // y toList opara que lo vuelva lista
+        return listaPelisPupis.stream().map(pelicula -> pelicula.getTitulo() + ". Calificación: " + pelicula.getCalificacion()).toList();
+    }
+
+    public List<String> getMasPopulares(){
+        return contenido.stream().filter(pelicula -> pelicula.getCalificacion() >= 4.0).map(pelicula -> pelicula.getTitulo() +". Calificación:" + pelicula.getCalificacion()).toList();
+    }
+
+    public String obtenerMasLarga() {
+        return contenido.stream()
+                // 1. Buscamos directamente el OBJETO película con mayor duración
+                .max(Comparator.comparingInt(Pelicula::getDuracion))
+                // 2. Transformamos ese objeto encontrado en el String que quieres
+                .map(p -> p.getTitulo() + " tiene una duración de " + p.getDuracion())
+                // 3. Si la lista está vacía, damos un mensaje de respaldo
+                .orElse("No hay películas en la lista");
     }
 
     public Pelicula buscarPorTitulo(String titulo){
-        for(Pelicula pelicula : contenido){
-            if(pelicula.getTitulo().equalsIgnoreCase(titulo)){ //compara el título ingresado ignorando mayúsculas y minúsculas
-                return pelicula;
-            }
-        }
-        return null;
+        return contenido.stream().filter(pelicula -> pelicula.getTitulo().equalsIgnoreCase(titulo)).findFirst().orElse(null); //tomará de contenido unicamente la primer peli que  la condición y si no existe ese primero retorna null
+    }
+
+    public List<String> buscarPorGenero(String genero) {
+        return contenido.stream()
+                .filter(p -> p.getGenero().equalsIgnoreCase(genero)) // Filtramos por género
+                .map(p -> p.getIdPeli() + ". " + p.getTitulo())     // Transformamos la Pelicula en el String requerido
+                .toList();                                          // Creamos la lista final directamente
     }
 
     public boolean eliminarPeliPorId(int idPelicula){
         // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
         return contenido.removeIf(peli -> peli.getIdPeli() == idPelicula);
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 }
