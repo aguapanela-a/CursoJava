@@ -1,7 +1,6 @@
 package platzi.play.project.contenido;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Pelicula {
     private String titulo;
@@ -12,6 +11,8 @@ public class Pelicula {
     private LocalDate fechaEstreno;
     private double calificacion;
     private boolean disponibilidad;
+
+    // crear los atributos idioma y calidad y hacer un enum para cada uno
 
     public Pelicula(String titulo,String descripcion, int duracion, Genero genero ){
         this.titulo = titulo;

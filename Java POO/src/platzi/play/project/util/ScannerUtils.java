@@ -44,8 +44,8 @@ public class ScannerUtils {
         while (true){
             String entrada = capturarTexto(mensaje);
             try {
-                return Genero.valueOf(entrada.toUpperCase());  //intente retornar el string ingresado convertido a genero
-            }catch (IllegalArgumentException e){                //si no existe el genero ingresado capturará el error IllegalArgumentException y, en lugar de terminar el programa, imprimirá lo expresado y se repetirá el while
+                return Genero.valueOf(entrada.toUpperCase());  //intente retornar el string ingresado convertido a genero con valueOf(String n)
+            }catch (IllegalArgumentException e){                //si no existe el género ingresado capturará el error IllegalArgumentException y, en lugar de terminar el programa, imprimirá lo expresado y se repetirá el while
                 System.out.println("Dato no aceptado. "+mensaje+":");
             }
         }
