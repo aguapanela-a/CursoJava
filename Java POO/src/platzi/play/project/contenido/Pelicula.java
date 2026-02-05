@@ -28,6 +28,7 @@ public class Pelicula {
         this.idioma = new ArrayList<>();
     }
 
+
     public void establecerIdiomas(List<Idioma> idiomasValidos){
         idioma.addAll(idiomasValidos);
     }

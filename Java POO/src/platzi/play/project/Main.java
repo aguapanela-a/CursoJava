@@ -3,6 +3,7 @@ package platzi.play.project;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
 import platzi.play.project.util.ScannerUtils;
 import java.time.format.DateTimeFormatter;
@@ -59,11 +60,16 @@ public class Main {
                     String tituloPeli = ScannerUtils.capturarTexto("Por favor escriba el título de la película a agregar");
                     String descripcionPeli = ScannerUtils.capturarTexto("Por favor escriba la descripción de la película");
                     int duracionPeli = ScannerUtils.capturarEntero("Por favor escriba la duración de la película");
-                    Genero generoPeli = Genero.valueOf(ScannerUtils.capturarTexto("Por favor escriba el género de la película"));
+                    Genero generoPeli = ScannerUtils.capturarGenero("Por favor escriba el género de la película");
 
-                    Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
+                    try{
+                        Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
+                        plataforma.agregarPeli(pelicula);
 
-                    plataforma.agregarPeli(pelicula);
+                    }catch (PeliculaExistenteException e){
+                        out.println(e.getMessage());
+                    }
+
                 }
                 case MOSTRAR_TODO -> {
 

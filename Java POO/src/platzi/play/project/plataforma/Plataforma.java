@@ -3,6 +3,7 @@ package platzi.play.project.plataforma;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.excepcion.PeliculaExistenteException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -27,6 +28,11 @@ public class Plataforma {
     }
 
     public void agregarPeli(Pelicula pelicula){
+
+        if(this.buscarPorTitulo(pelicula.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Pelicula
+            throw new PeliculaExistenteException(pelicula.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
+        }
+            //si no existe pues agrega la peli
         this.contenido.add(pelicula);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
         pelicula.setIdPeli(this.contadorID++);
     }
