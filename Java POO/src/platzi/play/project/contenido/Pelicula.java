@@ -66,7 +66,7 @@ public class Pelicula {
     }
 
     public boolean popular(){
-        return this.calificacion >= 4;  //devuelvem,e el resukltado de esta comparación
+        return this.calificacion >= 4;  //devuelve el resultado de esta comparación
     }
 
     public String getTitulo() {

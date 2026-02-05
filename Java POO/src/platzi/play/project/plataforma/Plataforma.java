@@ -27,7 +27,7 @@ public class Plataforma {
     }
 
     public void agregarPeli(Pelicula pelicula){
-        this.contenido.add(pelicula);  //métodfo add es similar al .append de python, agrega un elemento a la lista creada previamente
+        this.contenido.add(pelicula);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
         pelicula.setIdPeli(this.contadorID++);
     }
 
