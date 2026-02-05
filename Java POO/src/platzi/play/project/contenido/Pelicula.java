@@ -1,6 +1,9 @@
 package platzi.play.project.contenido;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Pelicula {
     private String titulo;
@@ -11,8 +14,9 @@ public class Pelicula {
     private LocalDate fechaEstreno;
     private double calificacion;
     private boolean disponibilidad;
+    private List<Idioma> idioma;
 
-    // crear los atributos idioma y calidad y hacer un enum para cada uno
+    // crear el atributos calidad y hacer un enum para cada uno
 
     public Pelicula(String titulo,String descripcion, int duracion, Genero genero ){
         this.titulo = titulo;
@@ -21,6 +25,15 @@ public class Pelicula {
         this.genero = genero;
         this.fechaEstreno = LocalDate.now();
         this.disponibilidad = true;
+        this.idioma = new ArrayList<>();
+    }
+
+    public void establecerIdiomas(List<Idioma> idiomasValidos){
+        idioma.addAll(idiomasValidos);
+    }
+
+    public List<Idioma> obtenerIdiomas(){
+        return Collections.unmodifiableList(this.idioma);
     }
 
     public Pelicula(String titulo, String descripcion, int duracion , Genero genero, boolean disponibilidad, double nota) {

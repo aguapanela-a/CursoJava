@@ -1,12 +1,13 @@
 package platzi.play.project;
 
 import platzi.play.project.contenido.Genero;
+import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
 import platzi.play.project.plataforma.Plataforma;
-import platzi.play.project.plataforma.Rol;
-import platzi.play.project.plataforma.Usuario;
 import platzi.play.project.util.ScannerUtils;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.out;
 
@@ -82,6 +83,8 @@ public class Main {
                             2. Pausar película
                             3. Ver ficha técnica
                             4. Calificar película
+                            5. Establecer idiomas
+                            6. Ver idiomas de la pelicula
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
@@ -92,6 +95,30 @@ public class Main {
                                     peli.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación de la peli del 1 al 5"));
                                     out.printf("Calificación ingresada para película %s: %.1f/5 %n", peli.getTitulo(), peli.getCalificacion());
                                 }
+                                case 5 -> {
+                                    out.println("Idiomas soportados en la plataforma:");
+                                    plataforma.getIdiomas().forEach(s -> out.printf("Idioma: %s%n",s));
+                                    List<Idioma> idiomasLista = new ArrayList<>();
+
+                                    while (true){
+                                        String idiomaNuevo = ScannerUtils.capturarTexto("Por favor ingrese el idioma que desea agregar a la película").toUpperCase();
+                                        idiomasLista.add(convertirIdiomas(idiomaNuevo));
+                                        int eleccion = ScannerUtils.capturarEntero("""
+                                                Desea ingresar otro idioma a esta película?
+                                                    1. SI
+                                                    2. NO""");
+                                        if(eleccion==2){
+                                            break;
+                                        }else if(eleccion!=1){
+                                            out.println("Ingrese una opción válida");
+                                        }
+                                    }
+                                    peli.establecerIdiomas(idiomasLista);
+                                }
+                                case 6 -> {
+                                    out.printf("La película %s tiene los siguientes idiomas:%n", peli.getTitulo());
+                                    peli.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
+                                }
                             }
                             break;
                         }
@@ -101,7 +128,7 @@ public class Main {
                 }
 
                 case BUSCAR_POR_GENERO -> {
-                    out.printf("Géneros dsiponibles: \n");
+                    out.printf("Géneros disponibles: \n");
                     plataforma.getGeneros().forEach(genero -> out.printf("Género %-10s%n", genero));
 
                     Genero genero = ScannerUtils.capturarGenero("Por favor ingrese el género que desea ver");
@@ -136,6 +163,18 @@ public class Main {
 
 
     }
+    private static Idioma convertirIdiomas(String idiomaS){
+        String actual = idiomaS;
+        while(true){
+            try{
+                return Idioma.valueOf(actual.toUpperCase().trim());
+            } catch (IllegalArgumentException e) {
+                out.println("Por favor ingrese un idioma válido");
+                actual = ScannerUtils.capturarTexto("");
+            }
+        }
+    }
+
     private static void cargarPeliculas(Plataforma plataforma) {
         plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, Genero.ANIMADA));
         plataforma.agregarPeli(new Pelicula("Inception"," ", 148, Genero.CIENCIA_FICCION));
