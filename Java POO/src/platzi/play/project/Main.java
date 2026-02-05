@@ -103,15 +103,23 @@ public class Main {
                                     while (true){
                                         String idiomaNuevo = ScannerUtils.capturarTexto("Por favor ingrese el idioma que desea agregar a la película").toUpperCase();
                                         idiomasLista.add(convertirIdiomas(idiomaNuevo));
+
                                         int eleccion = ScannerUtils.capturarEntero("""
-                                                Desea ingresar otro idioma a esta película?
-                                                    1. SI
-                                                    2. NO""");
-                                        if(eleccion==2){
-                                            break;
-                                        }else if(eleccion!=1){
-                                            out.println("Ingrese una opción válida");
+                                            Desea ingresar otro idioma a esta película?
+                                                1. SI
+                                                2. NO""");
+                                        while (true){
+                                            if(eleccion==2 || eleccion == 1){
+                                                break;
+                                            }else{
+                                                out.println("Ingrese una opción válida: ");
+                                                eleccion = ScannerUtils.capturarEntero("""
+                                                        Desea ingresar otro idioma a esta película?
+                                                            1. SI
+                                                            2. NO""");
+                                            }
                                         }
+                                        if (eleccion == 2){break;}
                                     }
                                     peli.establecerIdiomas(idiomasLista);
                                 }
