@@ -2,6 +2,7 @@ package platzi.play.project.util;
 
 import platzi.play.project.contenido.Genero;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ScannerUtils {
@@ -40,19 +41,33 @@ public class ScannerUtils {
         return dato;
     }
 
-    public static Genero capturarGenero(String mensaje){
-        while (true){
-            String entrada = capturarTexto(mensaje);
-            try {
-                return Genero.valueOf(entrada.toUpperCase());  //intente retornar el string ingresado convertido a genero con valueOf(String n)
-            }catch (IllegalArgumentException e){                //si no existe el género ingresado capturará el error IllegalArgumentException y, en lugar de terminar el programa, imprimirá lo expresado y se repetirá el while
-                System.out.println("Dato no aceptado. "+mensaje+":");
+//    public static Genero capturarGenero(String mensaje){
+//        while (true){
+//            String entrada = capturarTexto(mensaje);
+//            try {
+//                return Genero.valueOf(entrada.toUpperCase());  //intente retornar el string ingresado convertido a genero con valueOf(String n)
+//            }catch (IllegalArgumentException e){                //si no existe el género ingresado capturará el error IllegalArgumentException y, en lugar de terminar el programa, imprimirá lo expresado y se repetirá el while
+//                System.out.println("Dato no aceptado. "+mensaje+":");
+//            }
+//        }
+//    }
+
+    public static <T extends Enum<T>> T capturarEnum(String mensaje, Class<T> enumClase){ // <T extends Enum<T>> T: Define que el método trabajará con un tipo "T" genérico que debe ser obligatoriamente un Enum.
+        while(true){
+            String entrada = capturarTexto(mensaje);        // captura un string con capturarTexto;
+            try{
+                return Enum.valueOf(enumClase,entrada.toUpperCase()); // la clase Enum usa valueOf de forma genérica, entonces requiere una clase Enum creada y el string para convertirlo a una cte de esa clase
+            }catch (IllegalArgumentException e){
+                System.out.println("El dato ingresado no es aceptado, observe los datos aceptados");
+                //.getEnumConstants() es lo equivalente de .values() pero el parámetro es para objetos (enumClase) que representan una clase de tipo Enum genérica y el segundo es un método estático que solo se puede llamar desed Enums ya creados, no genéricos
+                Arrays.stream(enumClase.getEnumConstants()).map(Enum::name).forEach(System.out::println);  //lama la clase Arrays y el método Stream con las constantes del Enum como parámetro, y luego mapearlas (convertirlas) a un string con cierto formato e imprimirlas
             }
         }
     }
 }
 
+
 //la clase anterior permite usarse como un input(mensaje)
-//al hacer que los métodossean estáticos, NO es necesario crar un objeto de tipo ScannerUtils, sino que llamándo directamente la calse ya podré accader a él
+//al hacer que los métodos sean estáticos, NO es necesario crear un objeto de tipo ScannerUtils, sino que llamándo directamente la calse ya podré accader a él
 //así: int edad = ScannerUtils.capturarEntero("Ingresa tu edad");
 //utiles para llevar conteos o validaciones o clases utilitarias como esta

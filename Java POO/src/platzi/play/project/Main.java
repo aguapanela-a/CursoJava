@@ -60,7 +60,7 @@ public class Main {
                     String tituloPeli = ScannerUtils.capturarTexto("Por favor escriba el título de la película a agregar");
                     String descripcionPeli = ScannerUtils.capturarTexto("Por favor escriba la descripción de la película");
                     int duracionPeli = ScannerUtils.capturarEntero("Por favor escriba la duración de la película");
-                    Genero generoPeli = ScannerUtils.capturarGenero("Por favor escriba el género de la película");
+                    Genero generoPeli = ScannerUtils.capturarEnum("Por favor escriba el género de la película", Genero.class);
 
                     try{
                         Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
@@ -107,8 +107,8 @@ public class Main {
                                     List<Idioma> idiomasLista = new ArrayList<>();
 
                                     while (true){
-                                        String idiomaNuevo = ScannerUtils.capturarTexto("Por favor ingrese el idioma que desea agregar a la película").toUpperCase();
-                                        idiomasLista.add(convertirIdiomas(idiomaNuevo));
+                                        Idioma idiomaNuevo = ScannerUtils.capturarEnum("Por favor inrese el neuvo idioma de la peli", Idioma.class);
+                                        idiomasLista.add(idiomaNuevo);
 
                                         int eleccion = ScannerUtils.capturarEntero("""
                                             Desea ingresar otro idioma a esta película?
@@ -145,7 +145,7 @@ public class Main {
                     out.printf("Géneros disponibles: \n");
                     plataforma.getGeneros().forEach(genero -> out.printf("Género %-10s%n", genero));
 
-                    Genero genero = ScannerUtils.capturarGenero("Por favor ingrese el género que desea ver");
+                    Genero genero = ScannerUtils.capturarEnum("Por favor ingrese el género que desea ver",  Genero.class);
                     plataforma.buscarPorGenero(genero).forEach(s -> out.printf("Película %-10s%n", s));
                 }
 
@@ -177,17 +177,17 @@ public class Main {
 
 
     }
-    private static Idioma convertirIdiomas(String idiomaS){
-        String actual = idiomaS;
-        while(true){
-            try{
-                return Idioma.valueOf(actual.toUpperCase().trim());
-            } catch (IllegalArgumentException e) {
-                out.println("Por favor ingrese un idioma válido");
-                actual = ScannerUtils.capturarTexto("");
-            }
-        }
-    }
+//    private static Idioma convertirIdiomas(String idiomaS){
+//        String actual = idiomaS;
+//        while(true){
+//            try{
+//                return Idioma.valueOf(actual.toUpperCase().trim());
+//            } catch (IllegalArgumentException e) {
+//                out.println("Por favor ingrese un idioma válido");
+//                actual = ScannerUtils.capturarTexto("");
+//            }
+//        }
+//    }
 
     private static void cargarPeliculas(Plataforma plataforma) {
         plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, Genero.ANIMADA));
