@@ -18,5 +18,5 @@ public class MainStackHeap {
         //Lo que sucede es que ahora ambas variables apuntarán al mismo objeto, entonces al modificar ese objeto
         //desde cualquiera de esas variables, pues se modificará ese objeto, y el objeto al que antes apuntaba reyLeon
         //será eliminado por el garbageCollector en segundo plano, pues no se tiene un acceso a él porque nadie lo apunta/referencia
-    }
+    } // le cuesta un poco pero es pposibl <3
 }
