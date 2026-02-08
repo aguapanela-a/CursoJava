@@ -7,21 +7,20 @@ import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Plataforma {
     private int contadorID = 1;
     private String nombre;
     private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
     private List<Usuario> listaUser;
+    private Map<Pelicula, Integer> visualizaciones; //mapa que usa una película como llave y un entero como valor
 
     public Plataforma(String nombre){
         this.nombre = nombre;
         this.contenido = new ArrayList<>();  // OPara cualquier atributo de arriba, si no lo incicializo en el contructor, a la hora de crwear una instancia de esta clase, NO se inicializará ese atributo
         this.listaUser = new ArrayList<>(); // inicializo la lista de usuarios cuando creo la plataforma
+        this.visualizaciones = new HashMap<>();
     }
 
     public void registrarUsuario(String nombreUser, String correoUser,Rol rolUser){
@@ -37,6 +36,22 @@ public class Plataforma {
         this.contenido.add(pelicula);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
         pelicula.setIdPeli(this.contadorID++);
     }
+
+    public String reproducir(Pelicula peli) {
+        // 1. Obtenemos el valor actual o 0 si es la primera vez
+        int conteoActual = visualizaciones.getOrDefault(peli, 0);
+
+        // 2. Incrementamos y actualizamos el mapa
+        int nuevoConteo = conteoActual + 1;
+        visualizaciones.put(peli, nuevoConteo);
+
+        // 3. Retornamos el mensaje con el valor ya actualizado
+        return "%s. La película %s se ha reproducido %d veces."
+                .formatted(peli.reproducir(), peli.getTitulo(), nuevoConteo);
+    }
+    // también con mapeos se pueden aplicar funcionalidades para mostrar las películas con más vistas, o reiniciar los conteos (debo hacerlo algún día xd)
+
+
 
 //    public List<String> listarPelis(){
 //        int i; //inicializo el entero i

@@ -92,7 +92,7 @@ public class Main {
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
-                                case 1 -> out.println(peli.reproducir());
+                                case 1 -> out.println(plataforma.reproducir(peli));
                                 case 2 -> out.println(peli.pausar());
                                 case 3 -> out.println(peli.obtenerFichaTecnica());
                                 case 4 -> {
