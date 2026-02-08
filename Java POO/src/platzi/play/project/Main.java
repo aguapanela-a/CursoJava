@@ -3,6 +3,7 @@ package platzi.play.project;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
 import platzi.play.project.util.ScannerUtils;
@@ -71,12 +72,9 @@ public class Main {
                     }
 
                 }
-                case MOSTRAR_TODO -> {
 
-                    for(String peli : plataforma.listarPelis()){
-                        out.printf("Película %-10s%n", peli);
-                    }
-                }
+                case MOSTRAR_TODO -> plataforma.pelisResumidas().forEach(resumenes -> out.println(resumenes.getResumen()));
+
                 case BUSCAR_POR_TITULO -> {
 
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");

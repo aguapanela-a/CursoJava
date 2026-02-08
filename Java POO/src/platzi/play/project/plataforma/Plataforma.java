@@ -3,6 +3,7 @@ package platzi.play.project.plataforma;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 
 import java.lang.reflect.Array;
@@ -45,6 +46,12 @@ public class Plataforma {
 //            titulos.add(i + 1 + "- " + contenido.get(i).getTitulo());    //nombre_lista.get(i) es equivalente  a nombre_lista[i] de python
 //        return titulos;
 //    }
+
+    public List<ResumenContenido> pelisResumidas(){ //por cada película de contenido cree un objeto nuevo de tipo ResumentContenido y metalos a una lista
+        return contenido.stream()
+                .map(pelicula -> new ResumenContenido(pelicula.getTitulo(), pelicula.getDuracion(), pelicula.getGenero()))
+                .toList();
+    }
 
     public List<String> listarPelis(){
         return contenido.stream().map(pelicula -> pelicula.getIdPeli() + ". " + pelicula.getTitulo()).toList();
