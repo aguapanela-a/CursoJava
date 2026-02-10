@@ -60,7 +60,7 @@ public class Pelicula {
     public String calificar(double nota){
             if (nota >= 0 && nota <= 5){
                 this.calificacion = nota;
-                return String.format("Usted ha calificado la película %s con %.1f estrellas de 5. Gracias poor sus comentarios", this.titulo, this.calificacion);
+                return String.format("Usted ha calificado la película %s con %.1f estrellas de 5. Gracias por sus comentarios", this.titulo, this.calificacion);
             }else{
                 return "Ingrese un número válido";
             }

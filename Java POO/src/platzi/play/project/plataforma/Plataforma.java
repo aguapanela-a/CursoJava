@@ -5,6 +5,7 @@ import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
 import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
+import platzi.play.project.util.FileUtils;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -32,9 +33,15 @@ public class Plataforma {
         if(this.buscarPorTitulo(pelicula.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Pelicula
             throw new PeliculaExistenteException(pelicula.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
         }
+
+        FileUtils.escribirPelicula(pelicula);
             //si no existe pues agrega la peli
         this.contenido.add(pelicula);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
         pelicula.setIdPeli(this.contadorID++);
+    }
+
+    public void cargarPeliculas(){
+        this.contenido.addAll(FileUtils.leerPeliculas());
     }
 
     public String reproducir(Pelicula peli) {
@@ -58,23 +65,25 @@ public class Plataforma {
 //        List<String> titulos = new ArrayList<>();  //Creo la lista de Strings titulos y la inicializo como neuvo arraylist
 //        //para i = 0 hasta que i < el tamaño de la lista contenido -> sume 1 a i
 //        for (i = 0; i < contenido.size(); i++)
-//            titulos.add(i + 1 + "- " + contenido.get(i).getTitulo());    //nombre_lista.get(i) es equivalente  a nombre_lista[i] de python
+            //titulos.add(i + 1 + "- " + contenido.get(i).getTitulo());    //nombre_lista.get(i) es equivalente  a nombre_lista[i] de python
 //        return titulos;
 //    }
 
     public List<ResumenContenido> pelisResumidas(){ //por cada película de contenido cree un objeto nuevo de tipo ResumentContenido y metalos a una lista
         return contenido.stream()
-                .map(pelicula -> new ResumenContenido(pelicula.getTitulo(), pelicula.getDuracion(), pelicula.getGenero()))
+                .map(pelicula -> new ResumenContenido(pelicula.getTitulo(), pelicula.getDuracion(), pelicula.getGenero(), pelicula.getIdPeli()))
                 .toList();
     }
 
     public List<String> listarPelis(){
-        return contenido.stream().map(pelicula -> pelicula.getIdPeli() + ". " + pelicula.getTitulo()).toList();
+        return contenido.stream().map(p -> p.getIdPeli() + ". " + p.getTitulo()).toList();
     }
 
     public int getDuracionTotal(){
         return contenido.stream().mapToInt(Pelicula::getDuracion).sum();  //agarra cada duración de cada Pelicula de contenido y las suma
     }
+
+
 
     public List<String> getPopulares(int limite){
         List<Pelicula> listaPelisPupis =  contenido.stream()                        //En esta lista iniciamos el stream()
@@ -98,6 +107,8 @@ public class Plataforma {
                 // 3. Si la lista está vacía, damos un mensaje de respaldo
                 .orElse("No hay películas en la lista");
     }
+
+
 
     public Pelicula buscarPorTitulo(String titulo){
         return contenido.stream().filter(pelicula -> pelicula.getTitulo().equalsIgnoreCase(titulo)).findFirst().orElse(null); //tomará de contenido unicamente la primer peli que  la condición y si no existe ese primero retorna null

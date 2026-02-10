@@ -6,5 +6,6 @@ public enum Genero { // Permite definir un conjunto de valores constantes que ah
     DRAMA,
     ANIMADA,
     TERROR,
-    CIENCIA_FICCION
+    CIENCIA_FICCION,
+    INDIE
 }

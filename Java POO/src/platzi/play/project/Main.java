@@ -6,7 +6,15 @@ import platzi.play.project.contenido.Pelicula;
 import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
+import platzi.play.project.util.FileUtils;
 import platzi.play.project.util.ScannerUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +41,7 @@ public class Main {
     public static void main(String[] args) {
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
         Plataforma plataforma = new Plataforma(NOMBRE_PLATAFORMA);
-        cargarPeliculas(plataforma);
+        plataforma.cargarPeliculas();
         out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
         out.printf("Más de %d minutos de contenido!!", plataforma.getDuracionTotal());
 
@@ -73,7 +81,7 @@ public class Main {
 
                 }
 
-                case MOSTRAR_TODO -> plataforma.pelisResumidas().forEach(resumenes -> out.println(resumenes.getResumen()));
+                case MOSTRAR_TODO -> plataforma.pelisResumidas().forEach(resumenes -> out.println(resumenes. getResumen()));
 
                 case BUSCAR_POR_TITULO -> {
 
@@ -187,17 +195,6 @@ public class Main {
 //        }
 //    }
 
-    private static void cargarPeliculas(Plataforma plataforma) {
-        plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, Genero.ANIMADA));
-        plataforma.agregarPeli(new Pelicula("Inception"," ", 148, Genero.CIENCIA_FICCION));
-        plataforma.agregarPeli(new Pelicula("Titanic", " ",195, Genero.DRAMA));
-        plataforma.agregarPeli(new Pelicula("John Wick", " ",101, Genero.ACCION));
-        plataforma.agregarPeli(new Pelicula("El Conjuro", " ",112, Genero.TERROR));
-        plataforma.agregarPeli(new Pelicula("Coco", " ",105, Genero.ANIMADA));
-        plataforma.agregarPeli(new Pelicula("Interstellar", " ",169, Genero.CIENCIA_FICCION));
-        plataforma.agregarPeli(new Pelicula("Joker", " ",122, Genero.DRAMA));
-        plataforma.agregarPeli(new Pelicula("Toy Story", " ",81, Genero.ANIMADA));
-        plataforma.agregarPeli(new Pelicula("Avengers: Endgame", " ",181, Genero.ACCION));
-    }
+
 }
 //Encapsulameinto: es ocultar o proteger los detalles internos de una clase para que solo se pueda acceder a la info de esa clase de una forma controlada

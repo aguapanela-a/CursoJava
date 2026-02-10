@@ -59,9 +59,10 @@ public class ScannerUtils {
                 return Enum.valueOf(enumClase,entrada.toUpperCase()); // la clase Enum usa valueOf de forma genérica, entonces requiere una clase Enum creada y el string para convertirlo a una cte de esa clase
             }catch (IllegalArgumentException e){
                 System.out.println("El dato ingresado no es aceptado, observe los datos aceptados");
-                //.getEnumConstants() es lo equivalente de .values() pero el parámetro es para objetos (enumClase) que representan una clase de tipo Enum genérica y el segundo es un método estático que solo se puede llamar desed Enums ya creados, no genéricos
+                //.getEnumConstants() es lo equivalente de .values() pero el primero  es para referencial a objetos (enumClase) que representan una clase de tipo Enum genérica y el segundo es un método estático que solo se puede llamar desed Enums ya creados, no genéricos
                 Arrays.stream(enumClase.getEnumConstants()).map(Enum::name).forEach(System.out::println);  //lama la clase Arrays y el método Stream con las constantes del Enum como parámetro, y luego mapearlas (convertirlas) a un string con cierto formato e imprimirlas
             }
+
         }
     }
 }
