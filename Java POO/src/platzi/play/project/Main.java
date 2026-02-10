@@ -1,11 +1,23 @@
 package platzi.play.project;
 
+import platzi.play.project.contenido.Genero;
+import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.contenido.ResumenContenido;
+import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
-import platzi.play.project.plataforma.Rol;
-import platzi.play.project.plataforma.Usuario;
+import platzi.play.project.util.FileUtils;
 import platzi.play.project.util.ScannerUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.out;
 
@@ -29,7 +41,7 @@ public class Main {
     public static void main(String[] args) {
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
         Plataforma plataforma = new Plataforma(NOMBRE_PLATAFORMA);
-        cargarPeliculas(plataforma);
+        plataforma.cargarPeliculas();
         out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
         out.printf("Más de %d minutos de contenido!!", plataforma.getDuracionTotal());
 
@@ -54,23 +66,23 @@ public class Main {
             switch (opcionElegida){
                 case AGREGAR -> { // la flecha es operación lambda
 
-                    //contador++;
-
                     String tituloPeli = ScannerUtils.capturarTexto("Por favor escriba el título de la película a agregar");
                     String descripcionPeli = ScannerUtils.capturarTexto("Por favor escriba la descripción de la película");
                     int duracionPeli = ScannerUtils.capturarEntero("Por favor escriba la duración de la película");
-                    String generoPeli = ScannerUtils.capturarTexto("Por favor escriba el género de la película");
+                    Genero generoPeli = ScannerUtils.capturarEnum("Por favor escriba el género de la película", Genero.class);
 
-                    Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
-                    //pelicula.setIdPeli(contador);
-                    plataforma.agregarPeli(pelicula);
-                }
-                case MOSTRAR_TODO -> {
+                    try{
+                        Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
+                        plataforma.agregarPeli(pelicula);
 
-                    for(String peli : plataforma.listarPelis()){
-                        out.printf("Película %-10s%n", peli);
+                    }catch (PeliculaExistenteException e){
+                        out.println(e.getMessage());
                     }
+
                 }
+
+                case MOSTRAR_TODO -> plataforma.pelisResumidas().forEach(resumenes -> out.println(resumenes. getResumen()));
+
                 case BUSCAR_POR_TITULO -> {
 
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
@@ -81,17 +93,51 @@ public class Main {
                             int opcion = ScannerUtils.capturarEntero("""
                             1. Ver película
                             2. Pausar película
-                            3. Ver ficha técica
+                            3. Ver ficha técnica
                             4. Calificar película
+                            5. Establecer idiomas
+                            6. Ver idiomas de la pelicula
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
-                                case 1 -> out.println(peli.reproducir());
+                                case 1 -> out.println(plataforma.reproducir(peli));
                                 case 2 -> out.println(peli.pausar());
                                 case 3 -> out.println(peli.obtenerFichaTecnica());
                                 case 4 -> {
                                     peli.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación de la peli del 1 al 5"));
                                     out.printf("Calificación ingresada para película %s: %.1f/5 %n", peli.getTitulo(), peli.getCalificacion());
+                                }
+                                case 5 -> {
+                                    out.println("Idiomas soportados en la plataforma:");
+                                    plataforma.getIdiomas().forEach(s -> out.printf("Idioma: %s%n",s));
+                                    List<Idioma> idiomasLista = new ArrayList<>();
+
+                                    while (true){
+                                        Idioma idiomaNuevo = ScannerUtils.capturarEnum("Por favor inrese el neuvo idioma de la peli", Idioma.class);
+                                        idiomasLista.add(idiomaNuevo);
+
+                                        int eleccion = ScannerUtils.capturarEntero("""
+                                            Desea ingresar otro idioma a esta película?
+                                                1. SI
+                                                2. NO""");
+                                        while (true){
+                                            if(eleccion==2 || eleccion == 1){
+                                                break;
+                                            }else{
+                                                out.println("Ingrese una opción válida: ");
+                                                eleccion = ScannerUtils.capturarEntero("""
+                                                        Desea ingresar otro idioma a esta película?
+                                                            1. SI
+                                                            2. NO""");
+                                            }
+                                        }
+                                        if (eleccion == 2){break;}
+                                    }
+                                    peli.establecerIdiomas(idiomasLista);
+                                }
+                                case 6 -> {
+                                    out.printf("La película %s tiene los siguientes idiomas:%n", peli.getTitulo());
+                                    peli.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
                                 }
                             }
                             break;
@@ -100,10 +146,15 @@ public class Main {
                         out.println("Oops! Lamentamos decirte que la película a buscar aún no existe en " + NOMBRE_PLATAFORMA);
                     }
                 }
+
                 case BUSCAR_POR_GENERO -> {
-                    String genero = ScannerUtils.capturarTexto("Por favor ingrese el género que desea ver");
+                    out.printf("Géneros disponibles: \n");
+                    plataforma.getGeneros().forEach(genero -> out.printf("Género %-10s%n", genero));
+
+                    Genero genero = ScannerUtils.capturarEnum("Por favor ingrese el género que desea ver",  Genero.class);
                     plataforma.buscarPorGenero(genero).forEach(s -> out.printf("Película %-10s%n", s));
                 }
+
                 case VER_POPULARES -> {
 
                     out.printf("Top %d películas más populares de %s%n", TOP, NOMBRE_PLATAFORMA);
@@ -132,17 +183,18 @@ public class Main {
 
 
     }
-    private static void cargarPeliculas(Plataforma plataforma) {
-        plataforma.agregarPeli(new Pelicula("Shrek"," ", 90, "Animada"));
-        plataforma.agregarPeli(new Pelicula("Inception"," ", 148, "Ciencia Ficción"));
-        plataforma.agregarPeli(new Pelicula("Titanic", " ",195, "Drama"));
-        plataforma.agregarPeli(new Pelicula("John Wick", " ",101, "Acción"));
-        plataforma.agregarPeli(new Pelicula("El Conjuro", " ",112, "Terror"));
-        plataforma.agregarPeli(new Pelicula("Coco", " ",105, "Animada"));
-        plataforma.agregarPeli(new Pelicula("Interstellar", " ",169, "Ciencia Ficción"));
-        plataforma.agregarPeli(new Pelicula("Joker", " ",122, "Drama"));
-        plataforma.agregarPeli(new Pelicula("Toy Story", " ",81, "Animada"));
-        plataforma.agregarPeli(new Pelicula("Avengers: Endgame", " ",181, "Acción"));
-    }
+//    private static Idioma convertirIdiomas(String idiomaS){
+//        String actual = idiomaS;
+//        while(true){
+//            try{
+//                return Idioma.valueOf(actual.toUpperCase().trim());
+//            } catch (IllegalArgumentException e) {
+//                out.println("Por favor ingrese un idioma válido");
+//                actual = ScannerUtils.capturarTexto("");
+//            }
+//        }
+//    }
+
+
 }
 //Encapsulameinto: es ocultar o proteger los detalles internos de una clase para que solo se pueda acceder a la info de esa clase de una forma controlada

@@ -1,21 +1,27 @@
 package platzi.play.project.plataforma;
 
+import platzi.play.project.contenido.Genero;
+import platzi.play.project.contenido.Idioma;
 import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.contenido.ResumenContenido;
+import platzi.play.project.excepcion.PeliculaExistenteException;
+import platzi.play.project.util.FileUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Plataforma {
     private int contadorID = 1;
     private String nombre;
     private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
     private List<Usuario> listaUser;
+    private Map<Pelicula, Integer> visualizaciones; //mapa que usa una película como llave y un entero como valor
 
     public Plataforma(String nombre){
         this.nombre = nombre;
         this.contenido = new ArrayList<>();  // OPara cualquier atributo de arriba, si no lo incicializo en el contructor, a la hora de crwear una instancia de esta clase, NO se inicializará ese atributo
         this.listaUser = new ArrayList<>(); // inicializo la lista de usuarios cuando creo la plataforma
+        this.visualizaciones = new HashMap<>();
     }
 
     public void registrarUsuario(String nombreUser, String correoUser,Rol rolUser){
@@ -23,26 +29,61 @@ public class Plataforma {
     }
 
     public void agregarPeli(Pelicula pelicula){
-        this.contenido.add(pelicula);  //métodfo add es similar al .append de python, agrega un elemento a la lista creada previamente
+
+        if(this.buscarPorTitulo(pelicula.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Pelicula
+            throw new PeliculaExistenteException(pelicula.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
+        }
+
+        FileUtils.escribirPelicula(pelicula);
+            //si no existe pues agrega la peli
+        this.contenido.add(pelicula);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
         pelicula.setIdPeli(this.contadorID++);
     }
+
+    public void cargarPeliculas(){
+        this.contenido.addAll(FileUtils.leerPeliculas());
+    }
+
+    public String reproducir(Pelicula peli) {
+        // 1. Obtenemos el valor actual o 0 si es la primera vez
+        int conteoActual = visualizaciones.getOrDefault(peli, 0);
+
+        // 2. Incrementamos y actualizamos el mapa
+        int nuevoConteo = conteoActual + 1;
+        visualizaciones.put(peli, nuevoConteo);
+
+        // 3. Retornamos el mensaje con el valor ya actualizado
+        return "%s. La película %s se ha reproducido %d veces."
+                .formatted(peli.reproducir(), peli.getTitulo(), nuevoConteo);
+    }
+    // también con mapeos se pueden aplicar funcionalidades para mostrar las películas con más vistas, o reiniciar los conteos (debo hacerlo algún día xd)
+
+
 
 //    public List<String> listarPelis(){
 //        int i; //inicializo el entero i
 //        List<String> titulos = new ArrayList<>();  //Creo la lista de Strings titulos y la inicializo como neuvo arraylist
 //        //para i = 0 hasta que i < el tamaño de la lista contenido -> sume 1 a i
 //        for (i = 0; i < contenido.size(); i++)
-//            titulos.add(i + 1 + "- " + contenido.get(i).getTitulo());    //nombre_lista.get(i) es equivalente  a nombre_lista[i] de python
+            //titulos.add(i + 1 + "- " + contenido.get(i).getTitulo());    //nombre_lista.get(i) es equivalente  a nombre_lista[i] de python
 //        return titulos;
 //    }
 
+    public List<ResumenContenido> pelisResumidas(){ //por cada película de contenido cree un objeto nuevo de tipo ResumentContenido y metalos a una lista
+        return contenido.stream()
+                .map(pelicula -> new ResumenContenido(pelicula.getTitulo(), pelicula.getDuracion(), pelicula.getGenero(), pelicula.getIdPeli()))
+                .toList();
+    }
+
     public List<String> listarPelis(){
-        return contenido.stream().map(pelicula -> pelicula.getIdPeli() + ". " + pelicula.getTitulo()).toList();
+        return contenido.stream().map(p -> p.getIdPeli() + ". " + p.getTitulo()).toList();
     }
 
     public int getDuracionTotal(){
         return contenido.stream().mapToInt(Pelicula::getDuracion).sum();  //agarra cada duración de cada Pelicula de contenido y las suma
     }
+
+
 
     public List<String> getPopulares(int limite){
         List<Pelicula> listaPelisPupis =  contenido.stream()                        //En esta lista iniciamos el stream()
@@ -67,13 +108,15 @@ public class Plataforma {
                 .orElse("No hay películas en la lista");
     }
 
+
+
     public Pelicula buscarPorTitulo(String titulo){
         return contenido.stream().filter(pelicula -> pelicula.getTitulo().equalsIgnoreCase(titulo)).findFirst().orElse(null); //tomará de contenido unicamente la primer peli que  la condición y si no existe ese primero retorna null
     }
 
-    public List<String> buscarPorGenero(String genero) {
+    public List<String> buscarPorGenero(Genero genero) {
         return contenido.stream()
-                .filter(p -> p.getGenero().equalsIgnoreCase(genero)) // Filtramos por género
+                .filter(p -> p.getGenero().equals(genero)) // Filtramos por género
                 .map(p -> p.getIdPeli() + ". " + p.getTitulo())     // Transformamos la Pelicula en el String requerido
                 .toList();                                          // Creamos la lista final directamente
     }
@@ -81,6 +124,21 @@ public class Plataforma {
     public boolean eliminarPeliPorId(int idPelicula){
         // de la lista contenido eliminar el objeto de tipo película si el id es igual al dado
         return contenido.removeIf(peli -> peli.getIdPeli() == idPelicula);
+    }
+
+    public List<String> getGeneros(){
+
+        return Arrays                       //Arrays es una clase de java que tiene métodos estáticos para trabajar con arreglos, en este caso usamos el método stream() para crear un stream a partir del array devuelto por Genero.values()
+                .stream(Genero.values())    //values() es un método estático que devuelve un array con todos los valores (constantes) del enum Genero
+                .map(Genero::name)          //map transforma cada valor del enum en su representación en String usando el método name()
+                .toList();                  //toList() convierte el stream resultante en una lista de Strings y la devuelve
+    }
+
+    public List<String> getIdiomas(){ // no debería formatear los idiomas
+        return Arrays
+                .stream(Idioma.values())
+                .map(Idioma::name)
+                .toList();
     }
 
     public String getNombre() {
