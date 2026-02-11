@@ -18,7 +18,7 @@ public class Contenido {
 
     // crear el atributos calidad y hacer un enum para cada uno
 
-    public Contenido(String titulo, String descripcion, int duracion, Genero genero ){
+    public Contenido(String titulo, String descripcion, int duracion, Genero genero, double calificacion ){
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.duracion = duracion;
@@ -26,6 +26,7 @@ public class Contenido {
         this.fechaEstreno = LocalDate.now();
         this.disponibilidad = true;
         this.idioma = new ArrayList<>();
+        this.calificacion = calificacion;
     }
 
 
@@ -37,11 +38,6 @@ public class Contenido {
         return Collections.unmodifiableList(this.idioma);
     }
 
-    public Contenido(String titulo, String descripcion, int duracion , Genero genero, boolean disponibilidad, double nota) {
-        this(titulo, descripcion, duracion, genero); // ejecuta el contructor de arriba y luego este
-        this.disponibilidad = disponibilidad;
-        this.calificar(nota);
-    }
 
     // sobrecarga de constructores para hacer que algunos parámetros sean opcionales, como la disponibilidad y calificación
 

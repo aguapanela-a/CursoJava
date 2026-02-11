@@ -65,14 +65,15 @@ public class Main {
                     String descripcion = ScannerUtils.capturarTexto("Por favor escriba la descripción del contenido");
                     int duracion = ScannerUtils.capturarEntero("Por favor escriba la duración del contenido");
                     Genero genero = ScannerUtils.capturarEnum("Por favor escriba el género del contenido", Genero.class);
+                    double calificacion = ScannerUtils.capturarDecimal("Por favor escriba la calificacion del contenido");
 
                     try{
                         if(tipoDeContenido == 1){
-                            Pelicula pelicula = new Pelicula(titulo, descripcion, duracion, genero);
+                            Pelicula pelicula = new Pelicula(titulo, descripcion, duracion, genero, calificacion);
                             plataforma.agregarContenido(pelicula);
                         } else{
                             String narrador = ScannerUtils.capturarTexto("Por favor escriba el narrador del contenido");
-                            Documental documental = new Documental(titulo, descripcion, duracion, genero,narrador);
+                            Documental documental = new Documental(titulo, descripcion, duracion, genero,narrador, calificacion);
                             plataforma.agregarContenido(documental);
                         }
                     }catch (PeliculaExistenteException e){
