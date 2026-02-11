@@ -1,21 +1,20 @@
 package platzi.play.project.plataforma;
 
+import platzi.play.project.contenido.Contenido;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Idioma;
-import platzi.play.project.contenido.Pelicula;
 import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.util.FileUtils;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Plataforma {
     private int contadorID = 1;
     private String nombre;
-    private List<Pelicula> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
+    private List<Contenido> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
     private List<Usuario> listaUser;
-    private Map<Pelicula, Integer> visualizaciones; //mapa que usa una película como llave y un entero como valor
+    private Map<Contenido, Integer> visualizaciones; //mapa que usa una película como llave y un entero como valor
 
     public Plataforma(String nombre){
         this.nombre = nombre;
@@ -28,23 +27,23 @@ public class Plataforma {
         this.listaUser.add(new Usuario(nombreUser, correoUser, rolUser));
     }
 
-    public void agregarPeli(Pelicula pelicula){
+    public void agregarPeli(Contenido contenido){
 
-        if(this.buscarPorTitulo(pelicula.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Pelicula
-            throw new PeliculaExistenteException(pelicula.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
+        if(this.buscarPorTitulo(contenido.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Contenido
+            throw new PeliculaExistenteException(contenido.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
         }
 
-        FileUtils.escribirPelicula(pelicula);
+        FileUtils.escribirPelicula(contenido);
             //si no existe pues agrega la peli
-        this.contenido.add(pelicula);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
-        pelicula.setIdPeli(this.contadorID++);
+        this.contenido.add(contenido);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
+        contenido.setIdPeli(this.contadorID++);
     }
 
     public void cargarPeliculas(){
         this.contenido.addAll(FileUtils.leerPeliculas());
     }
 
-    public String reproducir(Pelicula peli) {
+    public String reproducir(Contenido peli) {
         // 1. Obtenemos el valor actual o 0 si es la primera vez
         int conteoActual = visualizaciones.getOrDefault(peli, 0);
 
@@ -80,14 +79,14 @@ public class Plataforma {
     }
 
     public int getDuracionTotal(){
-        return contenido.stream().mapToInt(Pelicula::getDuracion).sum();  //agarra cada duración de cada Pelicula de contenido y las suma
+        return contenido.stream().mapToInt(Contenido::getDuracion).sum();  //agarra cada duración de cada Contenido de contenido y las suma
     }
 
 
 
     public List<String> getPopulares(int limite){
-        List<Pelicula> listaPelisPupis =  contenido.stream()                        //En esta lista iniciamos el stream()
-                .sorted(Comparator.comparingDouble(Pelicula::getCalificacion)       //aquí usamos.sorted( ¿que acomodaremos? ), agarrará las calificaciones de cada película y ordenará las pelis según eso, comparando las calificaciones
+        List<Contenido> listaPelisPupis =  contenido.stream()                        //En esta lista iniciamos el stream()
+                .sorted(Comparator.comparingDouble(Contenido::getCalificacion)       //aquí usamos.sorted( ¿que acomodaremos? ), agarrará las calificaciones de cada película y ordenará las pelis según eso, comparando las calificaciones
                         .reversed())                                                //y reversed para que los ponga del mayor al menor
                 .limit(limite)                                                      //en la nueva lista unicamente se guardarán la cantidad de elementos ordenados que limit() diga
                 .toList();                                                          // y toList opara que lo vuelva lista
@@ -101,7 +100,7 @@ public class Plataforma {
     public String obtenerMasLarga() {
         return contenido.stream()
                 // 1. Buscamos directamente el OBJETO película con mayor duración
-                .max(Comparator.comparingInt(Pelicula::getDuracion))
+                .max(Comparator.comparingInt(Contenido::getDuracion))
                 // 2. Transformamos ese objeto encontrado en el String que quieres
                 .map(p -> p.getTitulo() + " tiene una duración de " + p.getDuracion())
                 // 3. Si la lista está vacía, damos un mensaje de respaldo
@@ -110,14 +109,14 @@ public class Plataforma {
 
 
 
-    public Pelicula buscarPorTitulo(String titulo){
+    public Contenido buscarPorTitulo(String titulo){
         return contenido.stream().filter(pelicula -> pelicula.getTitulo().equalsIgnoreCase(titulo)).findFirst().orElse(null); //tomará de contenido unicamente la primer peli que  la condición y si no existe ese primero retorna null
     }
 
     public List<String> buscarPorGenero(Genero genero) {
         return contenido.stream()
                 .filter(p -> p.getGenero().equals(genero)) // Filtramos por género
-                .map(p -> p.getIdPeli() + ". " + p.getTitulo())     // Transformamos la Pelicula en el String requerido
+                .map(p -> p.getIdPeli() + ". " + p.getTitulo())     // Transformamos la Contenido en el String requerido
                 .toList();                                          // Creamos la lista final directamente
     }
 

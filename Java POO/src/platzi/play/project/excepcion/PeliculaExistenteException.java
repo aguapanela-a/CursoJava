@@ -8,6 +8,6 @@ public class PeliculaExistenteException extends RuntimeException {
     public PeliculaExistenteException(String titulo) {
         // super() envía el mensaje al constructor de RuntimeException,
         // quedando disponible para ser consultado mediante el metodo .getMessage()
-        super("La película " + titulo + " ya existe");
+        super("El contenido " + titulo + " ya existe");
     }
 }

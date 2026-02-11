@@ -1,20 +1,12 @@
 package platzi.play.project;
 
+import platzi.play.project.contenido.Contenido;
 import platzi.play.project.contenido.Genero;
 import platzi.play.project.contenido.Idioma;
-import platzi.play.project.contenido.Pelicula;
-import platzi.play.project.contenido.ResumenContenido;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
-import platzi.play.project.util.FileUtils;
 import platzi.play.project.util.ScannerUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +64,8 @@ public class Main {
                     Genero generoPeli = ScannerUtils.capturarEnum("Por favor escriba el género de la película", Genero.class);
 
                     try{
-                        Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
-                        plataforma.agregarPeli(pelicula);
+                        Contenido contenido = new Contenido(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
+                        plataforma.agregarPeli(contenido);
 
                     }catch (PeliculaExistenteException e){
                         out.println(e.getMessage());
@@ -86,7 +78,7 @@ public class Main {
                 case BUSCAR_POR_TITULO -> {
 
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
-                    Pelicula peli = plataforma.buscarPorTitulo(titulo);
+                    Contenido peli = plataforma.buscarPorTitulo(titulo);
                     if(peli != null){
                         while(true){
                             out.printf("¿Qué desea hacer con la película %s?%n", peli.getTitulo());
@@ -96,7 +88,7 @@ public class Main {
                             3. Ver ficha técnica
                             4. Calificar película
                             5. Establecer idiomas
-                            6. Ver idiomas de la pelicula
+                            6. Ver idiomas de la contenido
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){

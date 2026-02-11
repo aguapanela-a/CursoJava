@@ -1,8 +1,7 @@
 package platzi.play.project.util;
 
+import platzi.play.project.contenido.Contenido;
 import platzi.play.project.contenido.Genero;
-import platzi.play.project.contenido.Pelicula;
-import platzi.play.project.plataforma.Plataforma;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,14 +19,14 @@ public class FileUtils {
     public static final String  SEPARADOR = "|";
 
 
-    public static void escribirPelicula(Pelicula pelicula){
-        String linea = String.join(SEPARADOR,  //.join lo que hace es que mete el separador entre cada uno se los siquientes strings
+    public static void escribirPelicula(Contenido contenido){
+        String linea = String.join(SEPARADOR,  //.join lo que hace es que mete el separador entre cada uno de los siquientes strings
                 "PELICULA"
-                ,pelicula.getTitulo(),
-                String.valueOf( pelicula.getDuracion()),
-                String.valueOf( pelicula.getGenero()),
-                String.valueOf( pelicula.getCalificacion()),
-                pelicula.getFechaEstreno().toString());
+                , contenido.getTitulo(),
+                String.valueOf( contenido.getDuracion()),
+                String.valueOf( contenido.getGenero()),
+                String.valueOf( contenido.getCalificacion()),
+                contenido.getFechaEstreno().toString());
 
         try{
             Files.writeString(                     //Llama la clase Files y el método .writeString(), pues se quiere escribir un string en el archivo,  que recibe
@@ -40,9 +39,9 @@ public class FileUtils {
         }
     }
 
-    public static List<Pelicula> leerPeliculas() {
+    public static List<Contenido> leerPeliculas() {
 
-        List<Pelicula> peliculasCargadas = new ArrayList<>();
+        List<Contenido> peliculasCargadas = new ArrayList<>();
 
         try{
             List<String> lineas = Files.readAllLines(Paths.get("Java POO/"+NOMBRE_ARCHIVO)); //La clase Files tiene un método readAllLines para leer TODAS las lineas de un archivo como lista de strings que se encuentra en un path/camino/ruta con el nombre
@@ -52,13 +51,13 @@ public class FileUtils {
                     String titulo = datos[1];
                     int duracion = Integer.parseInt(datos[2]);
                     Genero genero = Genero.valueOf(datos[3]);
-                    double calificacion = datos[4].isBlank() ? 0 : Double.parseDouble(datos[4]); // si datos en la posición 3 está en blanco retorne 0, si no convierta a double y guarde en la variable+
+                    double calificacion = datos[4].isBlank() ? 0 : Double.parseDouble(datos[4]); // si datos en la posición 4 está en blanco retorne 0, si no convierta a double y guarde en la variable+
                     LocalDate fechaEstreno = LocalDate.parse(datos[5]);
 
-                    Pelicula pelicula = new Pelicula(titulo, " ", duracion, genero, true, calificacion);
-                    pelicula.setFechaEstreno(fechaEstreno);
+                    Contenido contenido = new Contenido(titulo, " ", duracion, genero, true, calificacion);
+                    contenido.setFechaEstreno(fechaEstreno);
 
-                    peliculasCargadas.add(pelicula);
+                    peliculasCargadas.add(contenido);
                 }
             });
 
