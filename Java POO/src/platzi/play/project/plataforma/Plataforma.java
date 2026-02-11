@@ -27,7 +27,7 @@ public class Plataforma {
         this.listaUser.add(new Usuario(nombreUser, correoUser, rolUser));
     }
 
-    public void agregarPeli(Contenido contenido){
+    public void agregarContenido(Contenido contenido){
 
         if(this.buscarPorTitulo(contenido.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Contenido
             throw new PeliculaExistenteException(contenido.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe

@@ -2,6 +2,7 @@ package platzi.play.project.util;
 
 import platzi.play.project.contenido.Contenido;
 import platzi.play.project.contenido.Genero;
+import platzi.play.project.contenido.Pelicula;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,12 +21,19 @@ public class FileUtils {
 
 
     public static void escribirPelicula(Contenido contenido){
+        String dato;
+
+        if(contenido.getClass() == Pelicula.class){
+            dato = "PELICULA";
+        }else{
+            dato = "DOCUMENTAL";
+        }
         String linea = String.join(SEPARADOR,  //.join lo que hace es que mete el separador entre cada uno de los siquientes strings
-                "PELICULA"
-                , contenido.getTitulo(),
-                String.valueOf( contenido.getDuracion()),
-                String.valueOf( contenido.getGenero()),
-                String.valueOf( contenido.getCalificacion()),
+                dato,
+                contenido.getTitulo(),
+                String.valueOf(contenido.getDuracion()),
+                String.valueOf(contenido.getGenero()),
+                String.valueOf(contenido.getCalificacion()),
                 contenido.getFechaEstreno().toString());
 
         try{

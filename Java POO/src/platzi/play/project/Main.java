@@ -1,8 +1,6 @@
 package platzi.play.project;
 
-import platzi.play.project.contenido.Contenido;
-import platzi.play.project.contenido.Genero;
-import platzi.play.project.contenido.Idioma;
+import platzi.play.project.contenido.*;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
 import platzi.play.project.util.ScannerUtils;
@@ -58,15 +56,25 @@ public class Main {
             switch (opcionElegida){
                 case AGREGAR -> { // la flecha es operación lambda
 
-                    String tituloPeli = ScannerUtils.capturarTexto("Por favor escriba el título de la película a agregar");
-                    String descripcionPeli = ScannerUtils.capturarTexto("Por favor escriba la descripción de la película");
-                    int duracionPeli = ScannerUtils.capturarEntero("Por favor escriba la duración de la película");
-                    Genero generoPeli = ScannerUtils.capturarEnum("Por favor escriba el género de la película", Genero.class);
+                    int tipoDeContenido = ScannerUtils.capturarEntero("""
+                            ¿Desea ingresa una película o un documental?
+                                1. Película
+                                2. Documental""");
+
+                    String titulo = ScannerUtils.capturarTexto("Por favor escriba el título del contenido a agregar");
+                    String descripcion = ScannerUtils.capturarTexto("Por favor escriba la descripción del contenido");
+                    int duracion = ScannerUtils.capturarEntero("Por favor escriba la duración del contenido");
+                    Genero genero = ScannerUtils.capturarEnum("Por favor escriba el género del contenido", Genero.class);
 
                     try{
-                        Contenido contenido = new Contenido(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
-                        plataforma.agregarPeli(contenido);
-
+                        if(tipoDeContenido == 1){
+                            Pelicula pelicula = new Pelicula(titulo, descripcion, duracion, genero);
+                            plataforma.agregarContenido(pelicula);
+                        } else{
+                            String narrador = ScannerUtils.capturarTexto("Por favor escriba el narrador del contenido");
+                            Documental documental = new Documental(titulo, descripcion, duracion, genero,narrador);
+                            plataforma.agregarContenido(documental);
+                        }
                     }catch (PeliculaExistenteException e){
                         out.println(e.getMessage());
                     }
