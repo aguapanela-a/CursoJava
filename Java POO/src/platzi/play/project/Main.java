@@ -22,11 +22,12 @@ public class Main {
     public static final int MOSTRAR_TODO = 2;
     public static final int BUSCAR_POR_TITULO = 3;
     public static final int BUSCAR_POR_GENERO = 4;
-    public static final int VER_POPULARES = 5;
-    public static final int VER_MAS_POPULARES = 6;
-    public static final int OBTENER_MAS_LARGA = 7;
-    public static final int ELIMINAR = 8;
-    public static final int SALIR = 9;
+    public static final int FILTRAR_POR_TIPO = 5;
+    public static final int VER_POPULARES = 6;
+    public static final int VER_MAS_POPULARES = 7;
+    public static final int OBTENER_MAS_LARGA = 8;
+    public static final int ELIMINAR = 9;
+    public static final int SALIR = 10;
 
     public static void main(String[] args) {
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
@@ -39,16 +40,17 @@ public class Main {
 
         while(true){ // 4 comillas para escribir varias líneas de string
             int opcionElegida = ScannerUtils.capturarEntero("""
-                    Por favor igrese el número de la opción que desea escoger:
+                    Por favor ingrese el número de la opción que desea escoger:
                         1. Agregar película
                         2. Mostrar todo
                         3. Buscar por título
                         4. Buscar por género
-                        5. Ver populares
-                        6. Con calificación mayor a 4
-                        7. Buscar película más larga
-                        8. Eliminar película
-                        9. Salir de la plataforma
+                        5. Filtrar por tipo
+                        6. Ver populares
+                        7. Con calificación mayor a 4
+                        8. Buscar película más larga
+                        9. Eliminar película
+                        10. Salir de la plataforma
                         """);
 
             out.printf("Opción elegida: %d%n", opcionElegida);
@@ -82,11 +84,11 @@ public class Main {
 
                 }
 
-                case MOSTRAR_TODO -> plataforma.pelisResumidas().forEach(resumenes -> out.println(resumenes. getResumen()));
+                case MOSTRAR_TODO -> plataforma.contenidoResumido().forEach(resumenes -> out.println(resumenes.getResumen()));
 
                 case BUSCAR_POR_TITULO -> {
-
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
+
                     Contenido peli = plataforma.buscarPorTitulo(titulo);
                     if(peli != null){
                         while(true){
@@ -149,11 +151,31 @@ public class Main {
                 }
 
                 case BUSCAR_POR_GENERO -> {
-                    out.printf("Géneros disponibles: \n");
+                    out.printf("Géneros disponibles: %n");
                     plataforma.getGeneros().forEach(genero -> out.printf("Género %-10s%n", genero));
 
                     Genero genero = ScannerUtils.capturarEnum("Por favor ingrese el género que desea ver",  Genero.class);
                     plataforma.buscarPorGenero(genero).forEach(s -> out.printf("Película %-10s%n", s));
+                }
+                case FILTRAR_POR_TIPO -> {
+                    while (true){
+                        int opcion = ScannerUtils.capturarEntero("""
+                            Por favor seleccione que tipo de filtro desea poner:
+                                1. Películas
+                                2. Documentales
+                                """);
+
+                        if(opcion==1){
+                            out.println("Usted ha seleccionado películas:"+System.lineSeparator());
+                            plataforma.getPelis().stream().map(peli ->  peli.getTitulo()+"%n").forEach(out::println);
+                            break;
+                        }else{
+                            out.println("Usted ha seleccionado Documentales:"+System.lineSeparator());
+                            plataforma.getDocumentales().stream().map(doc -> doc.getTitulo() + " de " +doc.getNarrador()).forEach(out::println);
+                            break;
+                        }
+                    }
+
                 }
 
                 case VER_POPULARES -> {

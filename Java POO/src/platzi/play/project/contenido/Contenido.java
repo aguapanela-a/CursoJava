@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Contenido {
     private String titulo;
-    private int idPeli;
+    private int idContenido;
     private String descripcion;
     private int duracion;
     private Genero genero;
@@ -70,12 +70,12 @@ public class Contenido {
         return titulo;
     }
 
-    public int getIdPeli() {
-        return idPeli;
+    public int getId() {
+        return idContenido;
     }
 
-    public void setIdPeli(int idPeli) {
-        this.idPeli = idPeli;
+    public void setIdContenido(int idC) {
+        this.idContenido = idC;
     }
 
     public String getDescripcion() {
@@ -113,4 +113,5 @@ public class Contenido {
     public void setFechaEstreno(LocalDate fechaEstreno) {
         this.fechaEstreno = fechaEstreno;
     }
+
 }

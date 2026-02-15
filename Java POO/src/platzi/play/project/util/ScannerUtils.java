@@ -41,16 +41,6 @@ public class ScannerUtils {
         return dato;
     }
 
-//    public static Genero capturarGenero(String mensaje){
-//        while (true){
-//            String entrada = capturarTexto(mensaje);
-//            try {
-//                return Genero.valueOf(entrada.toUpperCase());  //intente retornar el string ingresado convertido a genero con valueOf(String n)
-//            }catch (IllegalArgumentException e){                //si no existe el género ingresado capturará el error IllegalArgumentException y, en lugar de terminar el programa, imprimirá lo expresado y se repetirá el while
-//                System.out.println("Dato no aceptado. "+mensaje+":");
-//            }
-//        }
-//    }
 
     public static <T extends Enum<T>> T capturarEnum(String mensaje, Class<T> enumClase){ // <T extends Enum<T>> T: Define que el método trabajará con un tipo "T" genérico que debe ser obligatoriamente un Enum.
         while(true){
