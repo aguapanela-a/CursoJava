@@ -55,7 +55,7 @@ public class Plataforma {
         visualizaciones.put(peli, nuevoConteo);
 
         // 3. Retornamos el mensaje con el valor ya actualizado
-        return "%s. La película %s se ha reproducido %d veces."
+        return "%s. El contenido %s se ha reproducido %d veces."
                 .formatted(peli.reproducir(), peli.getTitulo(), nuevoConteo);
     }
     // también con mapeos se pueden aplicar funcionalidades para mostrar las películas con más vistas, o reiniciar los conteos (debo hacerlo algún día xd)

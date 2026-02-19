@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Contenido {
+public abstract class Contenido {  //als e runa calse abstacte nose puede instanciar
     private String titulo;
     private int idContenido;
     private String descripcion;
@@ -16,7 +16,7 @@ public class Contenido {
     private boolean disponibilidad;
     private List<Idioma> idioma;
 
-    // crear el atributos calidad y hacer un enum para cada uno
+    // crear el atributo calidad y hacer un enum para cada uno
 
     public Contenido(String titulo, String descripcion, int duracion, Genero genero, double calificacion ){
         this.titulo = titulo;
@@ -41,17 +41,13 @@ public class Contenido {
 
     // sobrecarga de constructores para hacer que algunos parámetros sean opcionales, como la disponibilidad y calificación
 
-    public String reproducir(){
-        return String.format("Está reproduciendo %s", titulo);
-    }
+    public abstract String reproducir();
 
     public String pausar(){
         return String.format("Ha pausado %s", titulo);
     }
 
-    public String obtenerFichaTecnica(){
-        return String.format("La película  %s publicada el año %tY: %n %s %n Género: %s %n calificación: %.1f/5", this.titulo,this.fechaEstreno, this.descripcion, this.genero,this.calificacion);
-    }
+    public abstract String obtenerFichaTecnica();
 
     public String calificar(double nota){
             if (nota >= 0 && nota <= 5){

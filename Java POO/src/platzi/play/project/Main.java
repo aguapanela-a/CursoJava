@@ -89,26 +89,26 @@ public class Main {
                 case BUSCAR_POR_TITULO -> {
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
 
-                    Contenido peli = plataforma.buscarPorTitulo(titulo);
-                    if(peli != null){
+                    Contenido contenido = plataforma.buscarPorTitulo(titulo); //Buscar por titulo va a retorna un objeto ya sea de  tipo Pelicula o Documental...
+                    if(contenido != null){
                         while(true){
-                            out.printf("¿Qué desea hacer con la película %s?%n", peli.getTitulo());
+                            out.printf("¿Qué desea hacer con el contenido %s?%n", contenido.getTitulo());
                             int opcion = ScannerUtils.capturarEntero("""
-                            1. Ver película
-                            2. Pausar película
+                            1. Ver contenido
+                            2. Pausar contenido
                             3. Ver ficha técnica
-                            4. Calificar película
+                            4. Calificar contenido
                             5. Establecer idiomas
-                            6. Ver idiomas de la contenido
+                            6. Ver idiomas del contenido
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
-                                case 1 -> out.println(plataforma.reproducir(peli));
-                                case 2 -> out.println(peli.pausar());
-                                case 3 -> out.println(peli.obtenerFichaTecnica());
+                                case 1 -> out.println(plataforma.reproducir(contenido)); //... Por eso al ejecutar el método abstracto
+                                case 2 -> out.println(contenido.pausar());
+                                case 3 -> out.println(contenido.obtenerFichaTecnica());
                                 case 4 -> {
-                                    peli.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación de la peli del 1 al 5"));
-                                    out.printf("Calificación ingresada para película %s: %.1f/5 %n", peli.getTitulo(), peli.getCalificacion());
+                                    contenido.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación del contenido del 1 al 5"));
+                                    out.printf("Calificación ingresada para %s: %.1f/5 %n", contenido.getTitulo(), contenido.getCalificacion());
                                 }
                                 case 5 -> {
                                     out.println("Idiomas soportados en la plataforma:");
@@ -116,11 +116,11 @@ public class Main {
                                     List<Idioma> idiomasLista = new ArrayList<>();
 
                                     while (true){
-                                        Idioma idiomaNuevo = ScannerUtils.capturarEnum("Por favor inrese el neuvo idioma de la peli", Idioma.class);
+                                        Idioma idiomaNuevo = ScannerUtils.capturarEnum("Por favor inrese el neuvo idioma del contenido", Idioma.class);
                                         idiomasLista.add(idiomaNuevo);
 
                                         int eleccion = ScannerUtils.capturarEntero("""
-                                            Desea ingresar otro idioma a esta película?
+                                            Desea ingresar otro idioma a este contenido?
                                                 1. SI
                                                 2. NO""");
                                         while (true){
@@ -129,24 +129,24 @@ public class Main {
                                             }else{
                                                 out.println("Ingrese una opción válida: ");
                                                 eleccion = ScannerUtils.capturarEntero("""
-                                                        Desea ingresar otro idioma a esta película?
+                                                        Desea ingresar otro idioma a este contenido?
                                                             1. SI
                                                             2. NO""");
                                             }
                                         }
                                         if (eleccion == 2){break;}
                                     }
-                                    peli.establecerIdiomas(idiomasLista);
+                                    contenido.establecerIdiomas(idiomasLista);
                                 }
                                 case 6 -> {
-                                    out.printf("La película %s tiene los siguientes idiomas:%n", peli.getTitulo());
-                                    peli.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
+                                    out.printf("El contenido %s tiene los siguientes idiomas:%n", contenido.getTitulo());
+                                    contenido.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
                                 }
                             }
                             break;
                         }
                     }else{
-                        out.println("Oops! Lamentamos decirte que la película a buscar aún no existe en " + NOMBRE_PLATAFORMA);
+                        out.println("Oops! Lamentamos decirte que el contenido "+titulo+" a buscar aún no existe en " + NOMBRE_PLATAFORMA);
                     }
                 }
 
