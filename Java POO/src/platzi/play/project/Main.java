@@ -1,20 +1,10 @@
 package platzi.play.project;
 
-import platzi.play.project.contenido.Genero;
-import platzi.play.project.contenido.Idioma;
-import platzi.play.project.contenido.Pelicula;
-import platzi.play.project.contenido.ResumenContenido;
+import platzi.play.project.contenido.*;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
-import platzi.play.project.util.FileUtils;
 import platzi.play.project.util.ScannerUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +22,12 @@ public class Main {
     public static final int MOSTRAR_TODO = 2;
     public static final int BUSCAR_POR_TITULO = 3;
     public static final int BUSCAR_POR_GENERO = 4;
-    public static final int VER_POPULARES = 5;
-    public static final int VER_MAS_POPULARES = 6;
-    public static final int OBTENER_MAS_LARGA = 7;
-    public static final int ELIMINAR = 8;
-    public static final int SALIR = 9;
+    public static final int FILTRAR_POR_TIPO = 5;
+    public static final int VER_POPULARES = 6;
+    public static final int VER_MAS_POPULARES = 7;
+    public static final int OBTENER_MAS_LARGA = 8;
+    public static final int ELIMINAR = 9;
+    public static final int SALIR = 10;
 
     public static void main(String[] args) {
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
@@ -45,20 +36,23 @@ public class Main {
         out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
         out.printf("Más de %d minutos de contenido!!", plataforma.getDuracionTotal());
 
+        plataforma.getContenidoPromocionable().forEach(promocionable -> out.println(promocionable.promocionar()));
+
         //int contador = 0;
 
         while(true){ // 4 comillas para escribir varias líneas de string
             int opcionElegida = ScannerUtils.capturarEntero("""
-                    Por favor igrese el número de la opción que desea escoger:
+                    Por favor ingrese el número de la opción que desea escoger:
                         1. Agregar película
                         2. Mostrar todo
                         3. Buscar por título
                         4. Buscar por género
-                        5. Ver populares
-                        6. Con calificación mayor a 4
-                        7. Buscar película más larga
-                        8. Eliminar película
-                        9. Salir de la plataforma
+                        5. Filtrar por tipo
+                        6. Ver populares
+                        7. Con calificación mayor a 4
+                        8. Buscar película más larga
+                        9. Eliminar película
+                        10. Salir de la plataforma
                         """);
 
             out.printf("Opción elegida: %d%n", opcionElegida);
@@ -66,46 +60,57 @@ public class Main {
             switch (opcionElegida){
                 case AGREGAR -> { // la flecha es operación lambda
 
-                    String tituloPeli = ScannerUtils.capturarTexto("Por favor escriba el título de la película a agregar");
-                    String descripcionPeli = ScannerUtils.capturarTexto("Por favor escriba la descripción de la película");
-                    int duracionPeli = ScannerUtils.capturarEntero("Por favor escriba la duración de la película");
-                    Genero generoPeli = ScannerUtils.capturarEnum("Por favor escriba el género de la película", Genero.class);
+                    int tipoDeContenido = ScannerUtils.capturarEntero("""
+                            ¿Desea ingresa una película o un documental?
+                                1. Película
+                                2. Documental""");
+
+                    String titulo = ScannerUtils.capturarTexto("Por favor escriba el título del contenido a agregar");
+                    String descripcion = ScannerUtils.capturarTexto("Por favor escriba la descripción del contenido");
+                    int duracion = ScannerUtils.capturarEntero("Por favor escriba la duración del contenido");
+                    Genero genero = ScannerUtils.capturarEnum("Por favor escriba el género del contenido", Genero.class);
+                    double calificacion = ScannerUtils.capturarDecimal("Por favor escriba la calificacion del contenido");
 
                     try{
-                        Pelicula pelicula = new Pelicula(tituloPeli, descripcionPeli, duracionPeli, generoPeli);
-                        plataforma.agregarPeli(pelicula);
-
+                        if(tipoDeContenido == 1){
+                            Pelicula pelicula = new Pelicula(titulo, descripcion, duracion, genero, calificacion);
+                            plataforma.agregarContenido(pelicula);
+                        } else{
+                            String narrador = ScannerUtils.capturarTexto("Por favor escriba el narrador del contenido");
+                            Documental documental = new Documental(titulo, descripcion, duracion, genero,narrador, calificacion);
+                            plataforma.agregarContenido(documental);
+                        }
                     }catch (PeliculaExistenteException e){
                         out.println(e.getMessage());
                     }
 
                 }
 
-                case MOSTRAR_TODO -> plataforma.pelisResumidas().forEach(resumenes -> out.println(resumenes. getResumen()));
+                case MOSTRAR_TODO -> plataforma.contenidoResumido().forEach(resumenes -> out.println(resumenes.getResumen()));
 
                 case BUSCAR_POR_TITULO -> {
-
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
-                    Pelicula peli = plataforma.buscarPorTitulo(titulo);
-                    if(peli != null){
+
+                    Contenido contenido = plataforma.buscarPorTitulo(titulo); //Buscar por titulo va a retorna un objeto ya sea de  tipo Pelicula o Documental...
+                    if(contenido != null){
                         while(true){
-                            out.printf("¿Qué desea hacer con la película %s?%n", peli.getTitulo());
+                            out.printf("¿Qué desea hacer con el contenido %s?%n", contenido.getTitulo());
                             int opcion = ScannerUtils.capturarEntero("""
-                            1. Ver película
-                            2. Pausar película
+                            1. Ver contenido
+                            2. Pausar contenido
                             3. Ver ficha técnica
-                            4. Calificar película
+                            4. Calificar contenido
                             5. Establecer idiomas
-                            6. Ver idiomas de la pelicula
+                            6. Ver idiomas del contenido
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
-                                case 1 -> out.println(plataforma.reproducir(peli));
-                                case 2 -> out.println(peli.pausar());
-                                case 3 -> out.println(peli.obtenerFichaTecnica());
+                                case 1 -> out.println(plataforma.reproducir(contenido)); //... Por eso al ejecutar el método abstracto
+                                case 2 -> out.println(contenido.pausar());
+                                case 3 -> out.println(contenido.obtenerFichaTecnica());
                                 case 4 -> {
-                                    peli.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación de la peli del 1 al 5"));
-                                    out.printf("Calificación ingresada para película %s: %.1f/5 %n", peli.getTitulo(), peli.getCalificacion());
+                                    contenido.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación del contenido del 1 al 5"));
+                                    out.printf("Calificación ingresada para %s: %.1f/5 %n", contenido.getTitulo(), contenido.getCalificacion());
                                 }
                                 case 5 -> {
                                     out.println("Idiomas soportados en la plataforma:");
@@ -113,11 +118,11 @@ public class Main {
                                     List<Idioma> idiomasLista = new ArrayList<>();
 
                                     while (true){
-                                        Idioma idiomaNuevo = ScannerUtils.capturarEnum("Por favor inrese el neuvo idioma de la peli", Idioma.class);
+                                        Idioma idiomaNuevo = ScannerUtils.capturarEnum("Por favor inrese el neuvo idioma del contenido", Idioma.class);
                                         idiomasLista.add(idiomaNuevo);
 
                                         int eleccion = ScannerUtils.capturarEntero("""
-                                            Desea ingresar otro idioma a esta película?
+                                            Desea ingresar otro idioma a este contenido?
                                                 1. SI
                                                 2. NO""");
                                         while (true){
@@ -126,33 +131,53 @@ public class Main {
                                             }else{
                                                 out.println("Ingrese una opción válida: ");
                                                 eleccion = ScannerUtils.capturarEntero("""
-                                                        Desea ingresar otro idioma a esta película?
+                                                        Desea ingresar otro idioma a este contenido?
                                                             1. SI
                                                             2. NO""");
                                             }
                                         }
                                         if (eleccion == 2){break;}
                                     }
-                                    peli.establecerIdiomas(idiomasLista);
+                                    contenido.establecerIdiomas(idiomasLista);
                                 }
                                 case 6 -> {
-                                    out.printf("La película %s tiene los siguientes idiomas:%n", peli.getTitulo());
-                                    peli.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
+                                    out.printf("El contenido %s tiene los siguientes idiomas:%n", contenido.getTitulo());
+                                    contenido.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
                                 }
                             }
                             break;
                         }
                     }else{
-                        out.println("Oops! Lamentamos decirte que la película a buscar aún no existe en " + NOMBRE_PLATAFORMA);
+                        out.println("Oops! Lamentamos decirte que el contenido "+titulo+" a buscar aún no existe en " + NOMBRE_PLATAFORMA);
                     }
                 }
 
                 case BUSCAR_POR_GENERO -> {
-                    out.printf("Géneros disponibles: \n");
+                    out.printf("Géneros disponibles: %n");
                     plataforma.getGeneros().forEach(genero -> out.printf("Género %-10s%n", genero));
 
                     Genero genero = ScannerUtils.capturarEnum("Por favor ingrese el género que desea ver",  Genero.class);
                     plataforma.buscarPorGenero(genero).forEach(s -> out.printf("Película %-10s%n", s));
+                }
+                case FILTRAR_POR_TIPO -> {
+                    while (true){
+                        int opcion = ScannerUtils.capturarEntero("""
+                            Por favor seleccione que tipo de filtro desea poner:
+                                1. Películas
+                                2. Documentales
+                                """);
+
+                        if(opcion==1){
+                            out.println("Usted ha seleccionado películas:"+System.lineSeparator());
+                            plataforma.getPelis().stream().map(peli ->  peli.getTitulo()+"%n").forEach(out::println);
+                            break;
+                        }else{
+                            out.println("Usted ha seleccionado Documentales:"+System.lineSeparator());
+                            plataforma.getDocumentales().stream().map(doc -> doc.getTitulo() + " de " +doc.getNarrador()).forEach(out::println);
+                            break;
+                        }
+                    }
+
                 }
 
                 case VER_POPULARES -> {

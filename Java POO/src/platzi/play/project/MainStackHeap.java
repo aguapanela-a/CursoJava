@@ -1,13 +1,11 @@
 package platzi.play.project;
 
-import platzi.play.project.contenido.Pelicula;
-
 public class MainStackHeap {
     public static void main(String[] args) {
-//        Pelicula reyLeon = new Pelicula("Rey León", "describción rey león", 234, "Aventura");
-//        Pelicula harryPottter = new Pelicula("Harry Potter", "descripción ahrry", 234, "Terror");
+//        Contenido reyLeon = new Contenido("Rey León", "describción rey león", 234, "Aventura");
+//        Contenido harryPottter = new Contenido("Harry Potter", "descripción ahrry", 234, "Terror");
 //
-//        // ahora voy a hacer que reyLeon deje de apuntar al objeto Pelicula del Rey León y ahora punte al mismo de harri pote
+//        // ahora voy a hacer que reyLeon deje de apuntar al objeto Contenido del Rey León y ahora punte al mismo de harri pote
 //        reyLeon = harryPottter;
 //
 //        reyLeon.titulo = "Ahora ambos tendrán este título";

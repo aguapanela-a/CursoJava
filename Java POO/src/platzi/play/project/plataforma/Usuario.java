@@ -1,5 +1,6 @@
 package platzi.play.project.plataforma;
-import platzi.play.project.contenido.Pelicula;
+import platzi.play.project.contenido.Contenido;
+
 import java.time.LocalDateTime;
 
 public class Usuario {
@@ -25,11 +26,11 @@ public class Usuario {
         return "Su rol es " + this.rolUser.getNombre();
     }
 
-    public String ver(Pelicula pelicula){
-        return "El usuario "+ this.nombre + "\n" +pelicula.reproducir();
+    public String ver(Contenido contenido){
+        return "El usuario "+ this.nombre + "\n" + contenido.reproducir();
     }
 
-    public String pausar(Pelicula pelicula){
-        return "El usuario "+ this.nombre + "\n" +pelicula.pausar();
+    public String pausar(Contenido contenido){
+        return "El usuario "+ this.nombre + "\n" + contenido.pausar();
     }
 }
