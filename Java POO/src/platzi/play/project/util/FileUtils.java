@@ -73,14 +73,16 @@ public class FileUtils {
 
 
                 if(datos.length ==  6 && Objects.equals(datos[0], "PELICULA")){   //Objects.equals(a,b)  compara contenido NO dirección en memoria, y Evita que el programa falle si alguna de las variables es nula.
-                    Contenido peli = new Pelicula(titulo, " ", duracion, genero, calificacion); //la variable peli de tipo Contenido puede inicializar como tipo Película, eso es polimorfismo
+                    Contenido peli = new Pelicula(titulo, " ", duracion, genero); //la variable peli de tipo Contenido puede inicializar como tipo Película, eso es polimorfismo
                     peli.setFechaEstreno(fechaEstreno);
+                    peli.calificar(calificacion);
                     contenidoCargado.add(peli);
 
                 } else if (datos.length == 7 && Objects.equals(datos[0], "DOCUMENTAL")) {
                     String narrador = datos[6];
-                    Documental documental = new Documental(titulo,"",duracion, genero,narrador,calificacion);
+                    Documental documental = new Documental(titulo,"",duracion, genero,narrador);
                     documental.setFechaEstreno(fechaEstreno);
+                    documental.calificar(calificacion);
                     contenidoCargado.add(documental);
                 }
             });
