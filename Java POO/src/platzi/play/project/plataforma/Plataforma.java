@@ -71,12 +71,21 @@ public class Plataforma {
 
     public List<Pelicula> getPelis(){
         //Vamos a stremear cada contenid  y a filtrar por objetos tipo Pelicula, se castean a Pelicula y se devuelve la lista de Pelicula
+
         return contenido.stream().filter(contenido1 -> contenido1 instanceof Pelicula).map(contenidoFiltrado -> (Pelicula) contenidoFiltrado).toList();
     }
 
     public List<Documental> getDocumentales(){
         //Vamos a stremear cada contenid  y a filtrar por objetos tipo Pelicula, se castean a Pelicula y se devuelve la lista de Pelicula
         return contenido.stream().filter(Documental.class::isInstance).map(Documental.class::cast).toList();
+    }
+
+    public List<Promocionable>  getContenidoPromocionable(){
+       return contenido
+               .stream()
+               .filter(contenido1 -> contenido1 instanceof Promocionable)
+               .map(prom -> (Promocionable) prom)
+               .toList();
     }
 
     public int getDuracionTotal(){

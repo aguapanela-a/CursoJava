@@ -36,6 +36,8 @@ public class Main {
         out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
         out.printf("Más de %d minutos de contenido!!", plataforma.getDuracionTotal());
 
+        plataforma.getContenidoPromocionable().forEach(promocionable -> out.println(promocionable.promocionar()));
+
         //int contador = 0;
 
         while(true){ // 4 comillas para escribir varias líneas de string
