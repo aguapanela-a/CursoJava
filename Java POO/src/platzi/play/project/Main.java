@@ -1,6 +1,8 @@
 package platzi.play.project;
 
 import platzi.play.project.contenido.*;
+import platzi.play.project.excepcion.CalificacionException;
+import platzi.play.project.excepcion.ContenidoYaCalificadoException;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.plataforma.Plataforma;
 import platzi.play.project.util.ScannerUtils;
@@ -69,15 +71,14 @@ public class Main {
                     String descripcion = ScannerUtils.capturarTexto("Por favor escriba la descripción del contenido");
                     int duracion = ScannerUtils.capturarEntero("Por favor escriba la duración del contenido");
                     Genero genero = ScannerUtils.capturarEnum("Por favor escriba el género del contenido", Genero.class);
-                    double calificacion = ScannerUtils.capturarDecimal("Por favor escriba la calificacion del contenido");
 
                     try{
                         if(tipoDeContenido == 1){
-                            Pelicula pelicula = new Pelicula(titulo, descripcion, duracion, genero, calificacion);
+                            Pelicula pelicula = new Pelicula(titulo, descripcion, duracion, genero);
                             plataforma.agregarContenido(pelicula);
                         } else{
                             String narrador = ScannerUtils.capturarTexto("Por favor escriba el narrador del contenido");
-                            Documental documental = new Documental(titulo, descripcion, duracion, genero,narrador, calificacion);
+                            Documental documental = new Documental(titulo, descripcion, duracion, genero,narrador);
                             plataforma.agregarContenido(documental);
                         }
                     }catch (PeliculaExistenteException e){
@@ -91,7 +92,7 @@ public class Main {
                 case BUSCAR_POR_TITULO -> {
                     String titulo = ScannerUtils.capturarTexto("Por favor ingrese el nombre de la película a buscar");
 
-                    Contenido contenido = plataforma.buscarPorTitulo(titulo); //Buscar por titulo va a retorna un objeto ya sea de  tipo Pelicula o Documental...
+                    Contenido contenido = plataforma.buscarPorTitulo(titulo); //Buscar por titulo va a retorna un objeto ya sea de  tipo Pelicula o Documental que son hijas de Contenido...
                     if(contenido != null){
                         while(true){
                             out.printf("¿Qué desea hacer con el contenido %s?%n", contenido.getTitulo());
@@ -105,12 +106,33 @@ public class Main {
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
-                                case 1 -> out.println(plataforma.reproducir(contenido)); //... Por eso al ejecutar el método abstracto
+                                case 1 -> out.println(plataforma.reproducir(contenido)); //... Por eso al ejecutar el método abstracto reproducir() puede recibir tanto Pelicula como Documental
                                 case 2 -> out.println(contenido.pausar());
                                 case 3 -> out.println(contenido.obtenerFichaTecnica());
                                 case 4 -> {
-                                    contenido.calificar(ScannerUtils.capturarDecimal("Ingrese la calificación del contenido del 1 al 5"));
-                                    out.printf("Calificación ingresada para %s: %.1f/5 %n", contenido.getTitulo(), contenido.getCalificacion());
+                                        try{
+                                            intentarCalificar(contenido); //método que me valida que la calificación sea de 0 a 5 únicamente
+                                        }catch (ContenidoYaCalificadoException e) {
+                                            out.println("Error: " + e.getMessage());
+                                            int decision;
+                                            do {
+                                                decision = ScannerUtils.capturarEntero("""
+                                                        ¿Deseas cambiar la calificación del contenido elegido?
+                                                        1. SI
+                                                        2. NO
+                                                        """);
+                                                switch (decision) {
+                                                    case 2 -> {
+                                                        break;
+                                                    }
+                                                    case 1 -> {
+                                                        contenido.setCalificacion(0);
+                                                        intentarCalificar(contenido);
+                                                    }
+                                                    default -> out.println("ingrese una opción válida");
+                                                }
+                                            } while (decision != 1 && decision != 2);
+                                        }
                                 }
                                 case 5 -> {
                                     out.println("Idiomas soportados en la plataforma:");
@@ -207,6 +229,18 @@ public class Main {
         }
 
 
+    }
+
+    private static void intentarCalificar(Contenido contenido) {
+        while(true){
+            try{
+                contenido.calificar(ScannerUtils.capturarDecimal("Ingrese el valor de la calificación (entre 0 y 5)"));
+                out.printf("✅ Calificación para %s: %.1f/5 %n", contenido.getTitulo(), contenido.getCalificacion());
+                break;
+            }catch(CalificacionException e){
+                out.println("Error: "+e.getMessage());
+            }
+        }
     }
 //    private static Idioma convertirIdiomas(String idiomaS){
 //        String actual = idiomaS;

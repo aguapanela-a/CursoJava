@@ -42,7 +42,7 @@ public class ScannerUtils {
     }
 
 
-    public static <T extends Enum<T>> T capturarEnum(String mensaje, Class<T> enumClase){ // <T extends Enum<T>> T: Define que el método trabajará con un tipo "T" genérico que debe ser obligatoriamente un Enum.
+    public static <T extends Enum<T>> T capturarEnum(String mensaje, Class<T> enumClase){    // <T extends Enum<T>> T: Define que el método trabajará con un tipo "T" genérico que debe ser obligatoriamente un Enum.
         while(true){
             String entrada = capturarTexto(mensaje);        // captura un string con capturarTexto;
             try{

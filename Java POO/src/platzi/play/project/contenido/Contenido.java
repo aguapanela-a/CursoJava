@@ -1,5 +1,9 @@
 package platzi.play.project.contenido;
 
+import platzi.play.project.excepcion.CalificacionException;
+import platzi.play.project.excepcion.ContenidoYaCalificadoException;
+import platzi.play.project.excepcion.PeliculaExistenteException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +22,7 @@ public abstract class Contenido {  //als e runa calse abstacte nose puede instan
 
     // crear el atributo calidad y hacer un enum para cada uno
 
-    public Contenido(String titulo, String descripcion, int duracion, Genero genero, double calificacion ){
+    public Contenido(String titulo, String descripcion, int duracion, Genero genero){
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.duracion = duracion;
@@ -39,9 +43,7 @@ public abstract class Contenido {  //als e runa calse abstacte nose puede instan
     }
 
 
-    // sobrecarga de constructores para hacer que algunos parámetros sean opcionales, como la disponibilidad y calificación
-
-    public abstract String reproducir();
+    public abstract String reproducir(); //método abstracto para que las hijas lo implementen como quieran, no solo copiar el comportamiento del método de la clase padre
 
     public String pausar(){
         return String.format("Ha pausado %s", titulo);
@@ -49,13 +51,18 @@ public abstract class Contenido {  //als e runa calse abstacte nose puede instan
 
     public abstract String obtenerFichaTecnica();
 
-    public String calificar(double nota){
-            if (nota >= 0 && nota <= 5){
-                this.calificacion = nota;
-                return String.format("Usted ha calificado la película %s con %.1f estrellas de 5. Gracias por sus comentarios", this.titulo, this.calificacion);
-            }else{
-                return "Ingrese un número válido";
-            }
+    public boolean isCalificada(){
+        return this.calificacion > 0;
+    }
+
+    public void calificar(double nota) {
+        if (nota < 0 || nota > 5) {
+            throw new CalificacionException(nota);
+        }
+        if (isCalificada()) {
+            throw new ContenidoYaCalificadoException(this.getTitulo());
+        }
+        this.calificacion = nota;
     }
 
     public boolean popular(){
@@ -109,5 +116,7 @@ public abstract class Contenido {  //als e runa calse abstacte nose puede instan
     public void setFechaEstreno(LocalDate fechaEstreno) {
         this.fechaEstreno = fechaEstreno;
     }
+
+    public void setCalificacion(double nota) {this.calificacion = nota;}
 
 }

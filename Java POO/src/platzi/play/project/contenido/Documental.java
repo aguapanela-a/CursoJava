@@ -5,14 +5,14 @@ public class Documental extends Contenido implements Promocionable {
     //las clases hijas, además de tener losa tributos y métodos de la clase padre, pueden añadir sus propios atributos o métodos
     private String narrador;
 
-    public Documental(String titulo, String descripcion, int duracion, Genero genero, String narrador, double calificacion) {
-        super(titulo, descripcion, duracion, genero, calificacion);
+    public Documental(String titulo, String descripcion, int duracion, Genero genero, String narrador) {
+        super(titulo, descripcion, duracion, genero);
 
         //es muy importante que los atributos propios de la clase hija se llamen después del llamado de los atributos de la clase padre, desdués del super()
         this.narrador = narrador;
     }
 
-
+    //si una clase hija pone abstract a un método abstracto NO es obligatorio implementarlo, hasta el nivel de herencia que yo quiera
     @Override //notación que indica que estamos sobreescribiendo un método de la clase padre
     public String reproducir() {
         return "Reproduciendo documental " + this.getTitulo() + " narrado por " + this.getNarrador();
