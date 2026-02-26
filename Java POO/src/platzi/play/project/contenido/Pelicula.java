@@ -1,5 +1,8 @@
 package platzi.play.project.contenido;
 
+/**
+ * Clase que hereda de {@link Contenido} e implementa los dos métodos abstractos de la clase padre
+ */
 public class Pelicula extends  Contenido{
 
     public Pelicula(String titulo, String descripcion, int duracion, Genero genero) { //contructor de película

@@ -5,6 +5,11 @@ import platzi.play.project.contenido.Genero;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * [ScannerUtils]
+ * <p>Clase que permitirá entradas desde consola.
+ * Al hacer que sus métodos sean estáticos no es necesario crear una isntancia</p>
+ */
 public class ScannerUtils {
 
     //será estático pues el objeto SCANNER no cambia durante sus usos nunca
@@ -41,6 +46,13 @@ public class ScannerUtils {
         return dato;
     }
 
+    /**
+     *
+     * @param mensaje
+     * @param enumClase
+     * @return
+     * @param <T>
+     */
 
     public static <T extends Enum<T>> T capturarEnum(String mensaje, Class<T> enumClase){    // <T extends Enum<T>> T: Define que el método trabajará con un tipo "T" genérico que debe ser obligatoriamente un Enum.
         while(true){

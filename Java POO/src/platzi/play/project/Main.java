@@ -13,6 +13,15 @@ import java.util.List;
 
 import static java.lang.System.out;
 
+/**
+ * <h1>EStreaming B</h1>
+ * <p>Es un programa que permite visualizar y gestionar películas y documentales,</p>
+ *
+ * @author Erick Buitrago
+ * @version 1.0.0
+ * @since 2026
+ *
+ */
 
 public class Main {
     public static final String VERSION = "1.0.0"; // contants deberían ser mayúsculas, la palabra finales para contantes

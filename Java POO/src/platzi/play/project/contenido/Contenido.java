@@ -9,7 +9,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Contenido {  //als e runa calse abstacte nose puede instanciar
+/**
+ * <h1>Contenido</h1>
+ * <p>Esta es la clase base de la familia de contenidos, y como es abstracta no se pued instanciar
+ * Contiene métodos abstractos tales como:
+ * {@code reproducir()}
+ * que su comportamiento lo define y/o implementa cada clase hija de Contenido</p>
+ *
+ * @author Erick Buitrago
+ * @version 1.0.0
+ * @since 2026
+ *
+ * @see #reproducir()
+ */
+public abstract class Contenido {  //al ser una clase abstracta no se puede instanciar
     private String titulo;
     private int idContenido;
     private String descripcion;
@@ -38,11 +51,19 @@ public abstract class Contenido {  //als e runa calse abstacte nose puede instan
         idioma.addAll(idiomasValidos);
     }
 
+    /**
+     * Proporciona la lista de idiomas  disponibles
+     * * @return Una {@link List} de objetos de tipo {@link Idioma}
+     * La lista es inmutable para proteger la integridad de los datos
+     */
     public List<Idioma> obtenerIdiomas(){
         return Collections.unmodifiableList(this.idioma);
     }
 
-
+    /**
+     *
+     * {@code reproducir()} método abstracto
+     */
     public abstract String reproducir(); //método abstracto para que las hijas lo implementen como quieran, no solo copiar el comportamiento del método de la clase padre
 
     public String pausar(){
@@ -54,6 +75,14 @@ public abstract class Contenido {  //als e runa calse abstacte nose puede instan
     public boolean isCalificada(){
         return this.calificacion > 0;
     }
+
+    /**
+     * Registra una nota para el contenido si no ha sido calificado previamente.
+     * @param nota Valor decimal entre 0 y 5 que representa la calificación.
+     * @throws CalificacionException Si el valor está fuera del rango [0, 5].
+     * @throws ContenidoYaCalificadoException Si el contenido ya posee una nota asignada.
+     * @see #isCalificada()
+     */
 
     public void calificar(double nota) {
         if (nota < 0 || nota > 5) {

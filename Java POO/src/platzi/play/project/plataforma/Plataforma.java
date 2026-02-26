@@ -6,6 +6,13 @@ import platzi.play.project.util.FileUtils;
 
 import java.util.*;
 
+/**
+ * <h1>Plataforma</h1>
+ * <p>Clase que gestionará contenidos ({@link Contenido}), usuarios ({@link Usuario}), visualizaciones, id, etc</p>
+ * @author Erick Buitrago
+ * @version 1.0.0
+ * @since 2026
+ */
 public class Plataforma {
     private String nombre;
     private List<Contenido> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
@@ -25,6 +32,14 @@ public class Plataforma {
         this.listaUser.add(new Usuario(nombreUser, correoUser, rolUser));
     }
 
+    /**
+     * {@inheritDoc}
+     *Ingresa una {@link Pelicula} o un {@link Documental} a la plataforma
+     * @param contenido Objeto de tipo {@link Contenido} el cual debería ser agregado a {@code List<Contenido> contenido}
+     * @throws PeliculaExistenteException Si el nombre de la película que se quiere agregar ya existe como nombre de otra película existente
+     * @see #contenido
+     * @see PeliculaExistenteException
+     */
     public void agregarContenido(Contenido contenido){
 
         if(this.buscarPorTitulo(contenido.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Contenido
