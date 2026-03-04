@@ -52,7 +52,7 @@ public class Plataforma {
         contenido.setIdContenido((int) FileUtils.numeroLineas() - 1);
     }
 
-    public void cargarPeliculas(){
+    public void cargarContenido(){
         this.contenido.addAll(FileUtils.leerContenido());
         this.contenido.forEach(contenido1 -> idContenido.put(contenido1, contenido1.getId()));
 

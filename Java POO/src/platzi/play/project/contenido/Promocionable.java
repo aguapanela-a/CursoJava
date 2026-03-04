@@ -3,7 +3,7 @@ package platzi.play.project.contenido;
 public interface Promocionable {
     /**
      *
-     * Este método es para las clases que quiero que se peudan promocionar, independientemente de u jerarquía
+     * Este método es para las clases que quiero que se puedan promocionar, independientemente de u jerarquía
      */
     String promocionar();
 

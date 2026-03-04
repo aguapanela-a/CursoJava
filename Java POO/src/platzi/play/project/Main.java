@@ -43,7 +43,7 @@ public class Main {
     public static void main(String[] args) {
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("dd/MM/yyy HH:mm:ss");
         Plataforma plataforma = new Plataforma(NOMBRE_PLATAFORMA);
-        plataforma.cargarPeliculas();
+        plataforma.cargarContenido();
         out.println(NOMBRE_PLATAFORMA+" v"+VERSION);
         out.printf("Más de %d minutos de contenido!!", plataforma.getDuracionTotal());
 
