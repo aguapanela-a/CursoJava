@@ -1,5 +1,7 @@
 package platzi.play.project.plataforma;
 
+import platzi.play.project.DAO.ContenidoDAO;
+import platzi.play.project.DAO.ContenidoTxtDAO;
 import platzi.play.project.contenido.*;
 import platzi.play.project.excepcion.PeliculaExistenteException;
 import platzi.play.project.util.FileUtils;
@@ -19,6 +21,7 @@ public class Plataforma {
     private List<Usuario> listaUser;
     private Map<Contenido, Integer> visualizaciones; //mapa que usa una película como llave y un entero como valor
     private Map<Contenido, Integer> idContenido;
+    private ContenidoDAO contenidoDAO;
 
     public Plataforma(String nombre){
         this.nombre = nombre;
@@ -26,6 +29,7 @@ public class Plataforma {
         this.listaUser = new ArrayList<>(); // inicializo la lista de usuarios cuando creo la plataforma
         this.visualizaciones = new HashMap<>();
         this.idContenido = new HashMap<>();
+        this.contenidoDAO = new ContenidoTxtDAO();
     }
 
     public void registrarUsuario(String nombreUser, String correoUser,Rol rolUser){
@@ -34,7 +38,7 @@ public class Plataforma {
 
     /**
      * {@inheritDoc}
-     *Ingresa una {@link Pelicula} o un {@link Documental} a la plataforma
+     *Ingresa una {@link Pelicula} o un {@link Documental} a la plataforma por medio de ContenidoDAO
      * @param contenido Objeto de tipo {@link Contenido} el cual debería ser agregado a {@code List<Contenido> contenido}
      * @throws PeliculaExistenteException Si el nombre de la película que se quiere agregar ya existe como nombre de otra película existente
      * @see #contenido
@@ -46,19 +50,22 @@ public class Plataforma {
             throw new PeliculaExistenteException(contenido.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
         }
 
-        FileUtils.escribirContenido(contenido);
-            //si no existe pues agrega la peli
+        contenidoDAO.agregarContenido(contenido);
         this.contenido.add(contenido);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
         contenido.setIdContenido((int) FileUtils.numeroLineas() - 1);
     }
 
     public void cargarContenido(){
-        this.contenido.addAll(FileUtils.leerContenido());
+        this.contenido.addAll(contenidoDAO.cargarContenido());
         this.contenido.forEach(contenido1 -> idContenido.put(contenido1, contenido1.getId()));
 
         for (int i = 0; i < this.contenido.size(); i++) {
             contenido.get(i).setIdContenido(i);
         }
+    }
+
+    public void guardarDatos(String nombreContenido){
+        contenidoDAO.actualizarContenido(buscarPorTitulo(nombreContenido));
     }
 
     public String reproducir(Contenido peli) {

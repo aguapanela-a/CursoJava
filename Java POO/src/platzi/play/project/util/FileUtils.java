@@ -22,9 +22,7 @@ public class FileUtils {
     public static final String NOMBRE_ARCHIVO = "contenido.txt";
     public static final String  SEPARADOR = "|";
 
-
-    public static void escribirContenido(Contenido contenido){
-
+    public static String crearLineaDefinitiva(Contenido contenido) {
         String linea = String.join(SEPARADOR,  //.join lo que hace es que mete el separador entre cada uno de los siquientes strings
                 contenido.getTitulo(),
                 String.valueOf(contenido.getDuracion()),
@@ -38,11 +36,14 @@ public class FileUtils {
             lineaDefinitiva = "PELICULA" + SEPARADOR + linea;
         } else{
             Documental documental = (Documental) contenido; // Le ordeno al compilador que trate a la variable contenido (que es de tipo general Contenido) como un objeto específico de tipo Documental. Esto se hace para poder acceder a los métodos y atributos exclusivos de la clase Documental que la clase padre no tiene.
-
-
             lineaDefinitiva = "DOCUMENTAL"+SEPARADOR+linea+SEPARADOR+documental.getNarrador();;
         }
 
+        return lineaDefinitiva;
+    }
+
+    public static void escribirContenido(Contenido contenido){
+        String lineaDefinitiva = crearLineaDefinitiva(contenido);
 
         try{
             Files.writeString(                     //Llama la clase Files y el método .writeString(), pues se quiere escribir un string en el archivo,  que recibe

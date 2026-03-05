@@ -63,7 +63,7 @@ public class Main {
                         7. Con calificación mayor a 4
                         8. Buscar película más larga
                         9. Eliminar película
-                        10. Salir de la plataforma
+                        10. Guardar y salir de la plataforma
                         """);
 
             out.printf("Opción elegida: %d%n", opcionElegida);
@@ -233,7 +233,11 @@ public class Main {
                         out.println("Id de película no encontrado, por favor ingrese un id válido");
                     }
                 }
-                case SALIR -> System.exit(0); //Detiene el programa
+                case SALIR -> {
+
+
+                    System.exit(0);//Detiene el programa
+                }
             }
         }
 
