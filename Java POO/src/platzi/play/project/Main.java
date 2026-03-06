@@ -63,7 +63,7 @@ public class Main {
                         7. Con calificación mayor a 4
                         8. Buscar película más larga
                         9. Eliminar película
-                        10. Guardar y salir de la plataforma
+                        10. Salir de la plataforma
                         """);
 
             out.printf("Opción elegida: %d%n", opcionElegida);
@@ -142,6 +142,8 @@ public class Main {
                                                 }
                                             } while (decision != 1 && decision != 2);
                                         }
+
+                                        plataforma.guardarDatos(contenido);
                                 }
                                 case 5 -> {
                                     out.println("Idiomas soportados en la plataforma:");

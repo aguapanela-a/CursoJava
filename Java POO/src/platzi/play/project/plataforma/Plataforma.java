@@ -52,7 +52,6 @@ public class Plataforma {
 
         contenidoDAO.agregarContenido(contenido);
         this.contenido.add(contenido);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
-        contenido.setIdContenido((int) FileUtils.numeroLineas() - 1);
     }
 
     public void cargarContenido(){
@@ -64,8 +63,12 @@ public class Plataforma {
         }
     }
 
-    public void guardarDatos(String nombreContenido){
-        contenidoDAO.actualizarContenido(buscarPorTitulo(nombreContenido));
+    /**
+     * agarra el nombre String de un contenido y ejecuta actualziarContenido del DAO, le cual recibe el objeto que devuelve el método buscarPorTitulo()
+     * @param contenido
+     */
+    public void guardarDatos(Contenido contenido){
+        contenidoDAO.actualizarContenido(contenido);
     }
 
     public String reproducir(Contenido peli) {
