@@ -54,6 +54,9 @@ public class ContenidoTxtDAO implements ContenidoDAO {
         }
     }
 
+
+    // lógica de bajo nivel //
+
     private void sobreescribirArchivoTxt(List<Contenido> contenidos) {
 
         List<String> contenidosTexto = new ArrayList<>();
@@ -64,7 +67,7 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
         try {
             Files.write(
-                    Paths.get("Java POO/" + FileUtils.NOMBRE_ARCHIVO),
+                    Paths.get("Java POO/" + NOMBRE_ARCHIVO),
                     contenidosTexto,
                     StandardOpenOption.CREATE,
                     StandardOpenOption.TRUNCATE_EXISTING);
