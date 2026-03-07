@@ -20,7 +20,6 @@ public class Plataforma {
     private List<Contenido> contenido; // contenido es una lista vacía que guardará objetos de tipo Película  // Agregación porque la lista d ePelículas pueden existir icluso fuera de la platforma
     private List<Usuario> listaUser;
     private Map<Contenido, Integer> visualizaciones; //mapa que usa una película como llave y un entero como valor
-    private Map<Contenido, Integer> idContenido;
     private ContenidoDAO contenidoDAO;
 
     public Plataforma(String nombre){
@@ -28,7 +27,6 @@ public class Plataforma {
         this.contenido = new ArrayList<>();  // OPara cualquier atributo de arriba, si no lo incicializo en el contructor, a la hora de crwear una instancia de esta clase, NO se inicializará ese atributo
         this.listaUser = new ArrayList<>(); // inicializo la lista de usuarios cuando creo la plataforma
         this.visualizaciones = new HashMap<>();
-        this.idContenido = new HashMap<>();
         this.contenidoDAO = new ContenidoTxtDAO();
     }
 
@@ -45,22 +43,15 @@ public class Plataforma {
      * @see PeliculaExistenteException
      */
     public void agregarContenido(Contenido contenido){
-
         if(this.buscarPorTitulo(contenido.getTitulo()) != null){             //si buscarPorTitulo SI retorna una Contenido
             throw new PeliculaExistenteException(contenido.getTitulo());     //lance una nueva excepción para que imprima que la peli ya existe
         }
-
         contenidoDAO.agregarContenido(contenido);
         this.contenido.add(contenido);  //método add es similar al .append de python, agrega un elemento a la lista creada previamente
     }
 
     public void cargarContenido(){
         this.contenido.addAll(contenidoDAO.cargarContenido());
-        this.contenido.forEach(contenido1 -> idContenido.put(contenido1, contenido1.getId()));
-
-        for (int i = 0; i < this.contenido.size(); i++) {
-            contenido.get(i).setIdContenido(i);
-        }
     }
 
     /**

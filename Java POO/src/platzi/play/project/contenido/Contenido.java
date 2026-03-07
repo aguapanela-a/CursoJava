@@ -43,7 +43,8 @@ public abstract class Contenido {  //al ser una clase abstracta no se puede inst
         this.fechaEstreno = LocalDate.now();
         this.disponibilidad = true;
         this.idioma = new ArrayList<>();
-        this.calificacion = calificacion;
+        this.calificacion = calificacion;;
+        this.idContenido = -1;
     }
 
 

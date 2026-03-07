@@ -8,6 +8,7 @@ import platzi.play.project.util.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import static java.lang.System.out;
 public class ContenidoTxtDAO implements ContenidoDAO {
 
     public static final String NOMBRE_ARCHIVO = "contenido.txt";
+    public static final String ARCHIVO_ID = "metadata.conf";
     public static final String SEPARADOR = "|";
 
     @Override
@@ -29,6 +31,7 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     @Override
     public void agregarContenido(Contenido contenido) {
+        contenido.setIdContenido(obtenerSiguienteID());
         escribirContenido(contenido);
     }
 
@@ -57,6 +60,26 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     // lógica de bajo nivel //
 
+    private int obtenerSiguienteID (){
+        Path rutaArchivo = Paths.get("Java POO/"+ARCHIVO_ID);
+        int ultimoID = 0;
+        try{
+            if(Files.exists(rutaArchivo)){ //Si el archivo en la ruta eespecificada existe:
+                String contenido = Files.readString(rutaArchivo).trim(); //Va a guardar en la variable contenido el valor que esté ahí
+                ultimoID = Integer.parseInt(contenido); // hace el parseo de string a int para guardar el ultimo ID
+            }
+            int siguienteID = ultimoID+1;
+            Files.writeString(rutaArchivo,String.valueOf(siguienteID),StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+
+            return siguienteID;
+
+        } catch (IOException | NumberFormatException e) {
+            out.println("Error al escribir el id del contenido" + e.getMessage());
+            return -1;
+        }
+    }
+
+
     private void sobreescribirArchivoTxt(List<Contenido> contenidos) {
 
         List<String> contenidosTexto = new ArrayList<>();
@@ -78,6 +101,7 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     private String crearLineaDefinitiva(Contenido contenido) {
         String linea = String.join(SEPARADOR,  //.join lo que hace es que mete el separador entre cada uno de los siquientes strings
+                String.valueOf(contenido.getId()),
                 contenido.getTitulo(),
                 String.valueOf(contenido.getDuracion()),
                 String.valueOf(contenido.getGenero()),
@@ -120,25 +144,28 @@ public class ContenidoTxtDAO implements ContenidoDAO {
             lineas.forEach(linea -> {
                 String[] datos = linea.split("\\" + SEPARADOR); //cada línea la seperará por "|" y guardará cada pedazo en el arreglo datos
 
-                String titulo = datos[1];
-                int duracion = Integer.parseInt(datos[2]);
-                Genero genero = Genero.valueOf(datos[3]);
-                double calificacion = datos[4].isBlank() ? 0 : Double.parseDouble(datos[4]); // si datos en la posición 4 está en blanco retorne 0, si no convierta a double y guarde en la variable+
-                LocalDate fechaEstreno = LocalDate.parse(datos[5]);
+                int id = Integer.parseInt(datos[1]);
+                String titulo = datos[2];
+                int duracion = Integer.parseInt(datos[3]);
+                Genero genero = Genero.valueOf(datos[4]);
+                double calificacion = datos[5].isBlank() ? 0 : Double.parseDouble(datos[5]); // si datos en la posición 4 está en blanco retorne 0, si no convierta a double y guarde en la variable+
+                LocalDate fechaEstreno = LocalDate.parse(datos[6]);
 
 
-                if (datos.length == 6 && Objects.equals(datos[0], "PELICULA")) {   //Objects.equals(a,b)  compara contenido NO dirección en memoria, y Evita que el programa falle si alguna de las variables es nula.
+                if (datos.length == 7 && Objects.equals(datos[0], "PELICULA")) {   //Objects.equals(a,b)  compara contenido NO dirección en memoria, y Evita que el programa falle si alguna de las variables es nula.
                     Contenido peli = new Pelicula(titulo, " ", duracion, genero); //la variable peli de tipo Contenido puede inicializar como tipo Película, eso es polimorfismo
                     peli.setFechaEstreno(fechaEstreno);
                     peli.calificar(calificacion);
                     contenidoCargado.add(peli);
+                    peli.setIdContenido(id);
 
-                } else if (datos.length == 7 && Objects.equals(datos[0], "DOCUMENTAL")) {
-                    String narrador = datos[6];
+                } else if (datos.length == 8 && Objects.equals(datos[0], "DOCUMENTAL")) {
+                    String narrador = datos[7];
                     Documental documental = new Documental(titulo, "", duracion, genero, narrador);
                     documental.setFechaEstreno(fechaEstreno);
                     documental.calificar(calificacion);
                     contenidoCargado.add(documental);
+                    documental.setIdContenido(id);
                 }
             });
 
