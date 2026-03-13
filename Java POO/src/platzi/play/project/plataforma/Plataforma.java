@@ -139,6 +139,8 @@ public class Plataforma {
         return contenido.stream().filter(contenido1 -> contenido1.getTitulo().equalsIgnoreCase(titulo)).findFirst().orElse(null); //tomará de contenido unicamente la primer peli que  la condición y si no existe ese primero retorna null
     }
 
+
+
     public List<String> buscarPorGenero(Genero genero) {
         return contenido.stream()
                 .filter(p -> p.getGenero().equals(genero)) // Filtramos por género

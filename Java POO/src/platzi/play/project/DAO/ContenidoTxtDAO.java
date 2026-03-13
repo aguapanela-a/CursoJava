@@ -41,15 +41,15 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     @Override
     public void actualizarContenido(Contenido contenidoEditado) {
+
+        //lista de contenidos sin actualizar
         List<Contenido> contenidos = cargarContenido();
         boolean encontrado = false;
 
         for (int i = 0; i < contenidos.size(); i++) {
-            //TODO: cambiar por getID cuando implemente el ID
-            if (contenidos.get(i).getTitulo().equalsIgnoreCase(contenidoEditado.getTitulo())) {
-                contenidos.set(i, contenidoEditado); //la lista contenidos en la posición i será reemplazado por el objeto contenidoEditado
+            if (contenidos.get(i).getId() == contenidoEditado.getId()) {
+                contenidos.set(i, contenidoEditado);
                 encontrado = true;
-                break;
             }
         }
         if (encontrado) {
@@ -60,16 +60,17 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     // lógica de bajo nivel //
 
-    private int obtenerSiguienteID (){
-        Path rutaArchivo = Paths.get("Java POO/"+ARCHIVO_ID);
+
+    private int obtenerSiguienteID() {
+        Path rutaArchivo = Paths.get("Java POO/" + ARCHIVO_ID);
         int ultimoID = 0;
-        try{
-            if(Files.exists(rutaArchivo)){ //Si el archivo en la ruta eespecificada existe:
+        try {
+            if (Files.exists(rutaArchivo)) { //Si el archivo en la ruta especificada existe:
                 String contenido = Files.readString(rutaArchivo).trim(); //Va a guardar en la variable contenido el valor que esté ahí
                 ultimoID = Integer.parseInt(contenido); // hace el parseo de string a int para guardar el ultimo ID
             }
-            int siguienteID = ultimoID+1;
-            Files.writeString(rutaArchivo,String.valueOf(siguienteID),StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+            int siguienteID = ultimoID + 1;
+            Files.writeString(rutaArchivo, String.valueOf(siguienteID), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             return siguienteID;
 
@@ -82,11 +83,10 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     private void sobreescribirArchivoTxt(List<Contenido> contenidos) {
 
+        //lista de contenidos vacía
         List<String> contenidosTexto = new ArrayList<>();
 
-        contenidos.forEach(contenido -> {
-            contenidosTexto.add(crearLineaDefinitiva(contenido));
-        });
+        contenidos.forEach(contenido -> contenidosTexto.add(crearLineaDefinitiva(contenido)));
 
         try {
             Files.write(
@@ -115,7 +115,7 @@ public class ContenidoTxtDAO implements ContenidoDAO {
         } else {
             Documental documental = (Documental) contenido; // Le ordeno al compilador que trate a la variable contenido (que es de tipo general Contenido) como un objeto específico de tipo Documental. Esto se hace para poder acceder a los métodos y atributos exclusivos de la clase Documental que la clase padre no tiene.
             lineaDefinitiva = "DOCUMENTAL" + SEPARADOR + linea + SEPARADOR + documental.getNarrador();
-            ;
+
         }
 
         return lineaDefinitiva;
