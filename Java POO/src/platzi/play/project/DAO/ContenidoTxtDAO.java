@@ -36,7 +36,17 @@ public class ContenidoTxtDAO implements ContenidoDAO {
     }
 
     @Override
-    public void eliminarContenido(Contenido contenido) {
+    public void eliminarContenido(int id) {
+        List<Contenido> contenidos = cargarContenido();
+
+        for (int i = 0; i < contenidos.size(); i++) {
+            if(contenidos.get(i).getId() == id) {
+                contenidos.remove(i);
+                break;
+            }
+        }
+
+        sobreescribirArchivoTxt(contenidos);
     }
 
     @Override
@@ -60,6 +70,15 @@ public class ContenidoTxtDAO implements ContenidoDAO {
 
     // lógica de bajo nivel //
 
+    private Contenido buscarPorId(int id) {
+        List<Contenido> contenidos = cargarContenido();
+        for (Contenido contenido : contenidos) {
+            if (contenido.getId() == id) {
+                return contenido;
+            }
+        }
+        return null;
+    }
 
     private int obtenerSiguienteID() {
         Path rutaArchivo = Paths.get("Java POO/" + ARCHIVO_ID);

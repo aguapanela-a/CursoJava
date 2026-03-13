@@ -112,6 +112,7 @@ public class Main {
                             4. Calificar contenido
                             5. Establecer idiomas
                             6. Ver idiomas del contenido
+                            7. Eliminar contenido
                             """); // no sé si falta salir de búsqueda xd
 
                             switch (opcion){
@@ -176,6 +177,10 @@ public class Main {
                                 case 6 -> {
                                     out.printf("El contenido %s tiene los siguientes idiomas:%n", contenido.getTitulo());
                                     contenido.obtenerIdiomas().stream().map(Idioma::name).forEach(s -> out.printf("idioma: %s%n", s.toLowerCase()));
+                                }
+                                case 7 -> {
+                                    plataforma.eliminarContenido(contenido);
+                                    out.println("Usted ha eliminado: " + contenido.getTitulo());
                                 }
                             }
                             break;

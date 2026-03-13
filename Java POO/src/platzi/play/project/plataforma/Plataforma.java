@@ -62,6 +62,11 @@ public class Plataforma {
         contenidoDAO.actualizarContenido(contenido);
     }
 
+    public void eliminarContenido(Contenido contenido){
+        contenidoDAO.eliminarContenido(contenido.getId());
+        this.contenido.remove(contenido);
+    }
+
     public String reproducir(Contenido peli) {
         // 1. Obtenemos el valor actual o 0 si es la primera vez
         int conteoActual = visualizaciones.getOrDefault(peli, 0);
